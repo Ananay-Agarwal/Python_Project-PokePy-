@@ -70,14 +70,6 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.quit()
-                if event.key == pg.K_a or event.key == pg.K_LEFT:
-                    self.player.move(dx=-1)
-                if event.key == pg.K_d or event.key == pg.K_RIGHT:
-                    self.player.move(dx=1)
-                if event.key == pg.K_w or event.key == pg.K_UP:
-                    self.player.move(dy=-1)
-                if event.key == pg.K_s or event.key == pg.K_DOWN:
-                    self.player.move(dy=1)
 
     def show_start_screen(self):
         pass
