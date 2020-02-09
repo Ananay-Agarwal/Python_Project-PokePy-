@@ -29,11 +29,6 @@ class Player(pg.sprite.Sprite):
             self.vx *= 0.7071
             self.vy *= 0.7071
 
-    def move(self, dx=0, dy=0):
-        if not self.collide_with_walls(dx, dy):
-            self.x += dx
-            self.y += dy
-
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
