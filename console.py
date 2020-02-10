@@ -12,7 +12,7 @@ WIDTH = 1024   # 16 * 64 or 32 * 32 or 64 * 16
 HEIGHT = 768  # 16 * 48 or 32 * 24 or 64 * 12
 FPS = 60
 TITLE = "Python Game"
-BGCOLOR = DARKGREY
+BGCOLOR = GREEN
 
 TILESIZE = 32
 GRIDWIDTH = WIDTH / TILESIZE
@@ -20,3 +20,5 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 # Player settings
 PLAYER_SPEED = 300
+GRASS = 'grass.png'
+PLAYER_IMG = 'pokechar.png'

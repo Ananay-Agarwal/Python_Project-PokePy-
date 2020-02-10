@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d5f243be-3dcc-439f-9955-6a62464f10db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tilemap.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Kamli.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Kamli2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Kamli_Open.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/grass.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/pokechar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/pokechar_left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/tile_0024.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/tile_0028.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/console.py" beforeDir="false" afterPath="$PROJECT_DIR$/console.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -25,18 +32,47 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1XRaVne8Asn8kOYTV07oCCDYb9j" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Ananay Agarwal\Documents\GitHub\Python_Project\Assets" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="console" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Python_Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/console.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Python_Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -61,6 +97,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.console" />
       </list>
     </recent_temporary>
   </component>
@@ -89,35 +126,58 @@
     </task>
     <servers />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="732" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1581170091093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="732" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1581170091093" />
-    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1581169045500">
+    <state x="679" y="147" key="#main" timestamp="1581316900379">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581169045500" />
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom" timestamp="1581255139142">
+    <state x="679" y="147" key="#main/0.0.1920.1040@0.0.1920.1040" timestamp="1581316900379" />
+    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1581344284806">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1581255139142" />
-    <state width="1899" height="281" key="GridCell.Tab.0.center" timestamp="1581255139142">
+    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581344284806" />
+    <state width="1899" height="281" key="GridCell.Tab.0.bottom" timestamp="1581358548901">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1581255139142" />
-    <state width="1899" height="281" key="GridCell.Tab.0.left" timestamp="1581255139141">
+    <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1581358548901" />
+    <state width="1899" height="281" key="GridCell.Tab.0.center" timestamp="1581358548901">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1581255139141" />
-    <state width="1899" height="281" key="GridCell.Tab.0.right" timestamp="1581255139142">
+    <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1581358548901" />
+    <state width="1899" height="281" key="GridCell.Tab.0.left" timestamp="1581358548900">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1581255139142" />
-    <state x="655" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1581055115430">
+    <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1581358548900" />
+    <state width="1899" height="281" key="GridCell.Tab.0.right" timestamp="1581358548901">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="655" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1581055115430" />
+    <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1581358548901" />
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1581322980987">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1581322980987" />
+    <state width="1899" height="348" key="GridCell.Tab.1.center" timestamp="1581322980987">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1581322980987" />
+    <state width="1899" height="348" key="GridCell.Tab.1.left" timestamp="1581322980987">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1581322980987" />
+    <state width="1899" height="348" key="GridCell.Tab.1.right" timestamp="1581322980987">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1581322980987" />
+    <state x="655" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1581267522272">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="655" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1581267522272" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1581198553729">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

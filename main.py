@@ -17,17 +17,26 @@ class Game:
 
     def load_data(self):
         game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, 'Assets')
         self.map = Map(path.join(game_folder, 'map.txt'))
+        self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
+        self.grass_img = pg.image.load(path.join(img_folder, GRASS)).convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
+        self.grass = pg.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row)
+                if tile == '.':
+                    Grass(self, col, row)
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
                 if tile == 'P':
+                    Grass(self, col, row)
                     self.player = Player(self, col, row)
         self.camera = Camera(self.map.width, self.map.height)
 
@@ -53,7 +62,7 @@ class Game:
 
     def draw(self):
         self.screen.fill(BGCOLOR)
-        self.draw_grid()
+        # self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         pg.display.flip()
