@@ -20,7 +20,8 @@ class Game:
         img_folder = path.join(game_folder, 'Assets')
         self.map = Map(path.join(game_folder, 'map.txt'))
         self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
-        self.grass_img = pg.image.load(path.join(img_folder, GRASS)).convert_alpha()
+        self.grass_img = pg.image.load(path.join(img_folder, GRASS_IMG)).convert_alpha()
+        self.wall_img = pg.image.load(path.join(img_folder, WALL_IMG)).convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game

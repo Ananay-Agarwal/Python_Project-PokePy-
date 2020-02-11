@@ -16,17 +16,22 @@ class Player(pg.sprite.Sprite):
 
     def get_keys(self):
         self.vel = vec(0, 0)
+
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -PLAYER_SPEED
+            self.image = pg.image.load(path.join(img_folder, 'pokechar_left.png')).convert_alpha()
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = PLAYER_SPEED
+            self.image = pg.image.load(path.join(img_folder, 'pokechar_right.png')).convert_alpha()
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel.y = -PLAYER_SPEED
+            self.image = pg.image.load(path.join(img_folder, 'pokechar_up.png')).convert_alpha()
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel.y = PLAYER_SPEED
+            self.image = pg.image.load(path.join(img_folder, 'pokechar_down.png')).convert_alpha()
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
 
@@ -65,7 +70,7 @@ class Wall(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(RED)
+        self.image = game.wall_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
