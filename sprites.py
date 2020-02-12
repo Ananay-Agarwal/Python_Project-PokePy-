@@ -3,7 +3,6 @@ import pygame as pg
 from console import *
 vec = pg.math.Vector2
 
-
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
@@ -13,27 +12,49 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.vel = vec(0, 0)
         self.pos = vec(x, y) * TILESIZE
+        self.direction = 0
+        self.counter = 0
 
     def get_keys(self):
         self.vel = vec(0, 0)
-
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
         keys = pg.key.get_pressed()
+        # initializing
+        image_left = ['pokechar_left_1.png', 'pokechar_left_2.png', 'pokechar_left_3.png', 'pokechar_left_4.png']
+        image_right = ['pokechar_right_1.png', 'pokechar_right_2.png', 'pokechar_right_3.png', 'pokechar_right_4.png']
+        image_up = ['pokechar_up_1.png', 'pokechar_up_2.png', 'pokechar_up_3.png', 'pokechar_up_4.png']
+        image_down = ['pokechar_down_1.png', 'pokechar_down_2.png', 'pokechar_down_3.png', 'pokechar_down_4.png']
+        self.counter += 1
+        self.counter %= 32
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, 'pokechar_left.png')).convert_alpha()
-        if keys[pg.K_RIGHT] or keys[pg.K_d]:
+            self.image = pg.image.load(path.join(img_folder, image_left[int(self.counter/8)])).convert_alpha()
+            self.direction = 1
+        elif keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, 'pokechar_right.png')).convert_alpha()
+            self.image = pg.image.load(path.join(img_folder, image_right[int(self.counter/8)])).convert_alpha()
+            self.direction = 2
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel.y = -PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, 'pokechar_up.png')).convert_alpha()
-        if keys[pg.K_DOWN] or keys[pg.K_s]:
+            self.image = pg.image.load(path.join(img_folder, image_up[int(self.counter/8)])).convert_alpha()
+            self.direction = 3
+        elif keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel.y = PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, 'pokechar_down.png')).convert_alpha()
+            self.image = pg.image.load(path.join(img_folder, image_down[int(self.counter/8)])).convert_alpha()
+            self.direction = 4
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
+        print(self.counter)
+        if self.vel.x == 0 and self.vel.y == 0:
+            if self.direction == 1:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_left_1.png')).convert_alpha()
+            if self.direction == 2:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_right_1.png')).convert_alpha()
+            if self.direction == 3:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_up_1.png')).convert_alpha()
+            if self.direction == 4:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_down_1.png')).convert_alpha()
 
     def collide_with_walls(self, dir):
         if dir == 'x':

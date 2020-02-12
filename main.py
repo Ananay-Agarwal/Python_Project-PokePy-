@@ -12,6 +12,8 @@ class Game:
         pg.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
+        icon = pg.image.load('Assets\Pokeball.png')
+        pg.display.set_icon(icon)
         self.clock = pg.time.Clock()
         self.load_data()
 
