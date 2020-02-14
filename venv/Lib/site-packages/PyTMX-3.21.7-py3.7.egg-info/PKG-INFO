@@ -1,0 +1,21 @@
+Metadata-Version: 1.1
+Name: PyTMX
+Version: 3.21.7
+Summary: loads tiled tmx maps.  for python 2.7 and 3.3+
+Home-page: UNKNOWN
+Author: bitcraft
+Author-email: leif.theden@gmail.com
+License: LGPLv3
+Description: https://github.com/bitcraft/PyTMX
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Games/Entertainment
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Software Development :: Libraries :: pygame

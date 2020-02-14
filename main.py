@@ -5,7 +5,6 @@ from sprites import *
 from os import path
 from tilemap import *
 
-
 class Game:
 
     def __init__(self):
@@ -20,7 +19,11 @@ class Game:
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
-        self.map = Map(path.join(game_folder, 'map.txt'))
+        map_folder = path.join(img_folder, 'Maps')
+        # self.map = Map(path.join(game_folder, 'map.txt'))
+        self.map = TiledMap(path.join(map_folder, 'Hometown.tmx'))
+        self.map_img = self.map.make_map()
+        self.map_rect = self.map_img.get_rect()
         self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
         self.grass_img = pg.image.load(path.join(img_folder, GRASS_IMG)).convert_alpha()
         self.wall_img = pg.image.load(path.join(img_folder, WALL_IMG)).convert_alpha()
@@ -30,7 +33,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.grass = pg.sprite.Group()
-        for row, tiles in enumerate(self.map.data):
+        '''for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row)
@@ -40,7 +43,8 @@ class Game:
             for col, tile in enumerate(tiles):
                 if tile == 'P':
                     Grass(self, col, row)
-                    self.player = Player(self, col, row)
+                    self.player = Player(self, col, row)'''
+        self.player = Player(self, 20, 20)
         self.camera = Camera(self.map.width, self.map.height)
 
     def run(self):
@@ -65,6 +69,7 @@ class Game:
 
     def draw(self):
         self.screen.fill(BGCOLOR)
+        self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect))
         # self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))

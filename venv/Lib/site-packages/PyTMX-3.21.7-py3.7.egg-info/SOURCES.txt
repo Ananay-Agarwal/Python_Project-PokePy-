@@ -1,0 +1,12 @@
+setup.cfg
+setup.py
+PyTMX.egg-info/PKG-INFO
+PyTMX.egg-info/SOURCES.txt
+PyTMX.egg-info/dependency_links.txt
+PyTMX.egg-info/requires.txt
+PyTMX.egg-info/top_level.txt
+pytmx/__init__.py
+pytmx/pytmx.py
+pytmx/util_pygame.py
+pytmx/util_pyglet.py
+pytmx/util_pysdl2.py

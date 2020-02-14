@@ -45,16 +45,7 @@ class Player(pg.sprite.Sprite):
             self.direction = 4
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
-        print(self.counter)
-        if self.vel.x == 0 and self.vel.y == 0:
-            if self.direction == 1:
-                self.image = pg.image.load(path.join(img_folder, 'pokechar_left_1.png')).convert_alpha()
-            if self.direction == 2:
-                self.image = pg.image.load(path.join(img_folder, 'pokechar_right_1.png')).convert_alpha()
-            if self.direction == 3:
-                self.image = pg.image.load(path.join(img_folder, 'pokechar_up_1.png')).convert_alpha()
-            if self.direction == 4:
-                self.image = pg.image.load(path.join(img_folder, 'pokechar_down_1.png')).convert_alpha()
+        # print(self.counter)
 
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -78,6 +69,18 @@ class Player(pg.sprite.Sprite):
 
     def update(self):
         self.get_keys()
+        game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, 'Assets')
+        # check if player is idle
+        if self.vel.x == 0 and self.vel.y == 0:
+            if self.direction == 1:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_left_1.png')).convert_alpha()
+            if self.direction == 2:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_right_1.png')).convert_alpha()
+            if self.direction == 3:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_up_1.png')).convert_alpha()
+            if self.direction == 4:
+                self.image = pg.image.load(path.join(img_folder, 'pokechar_down_1.png')).convert_alpha()
         self.pos += self.vel * self.game.dt
         self.rect.x = self.pos.x
         self.collide_with_walls('x')

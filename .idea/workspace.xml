@@ -2,47 +2,56 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d5f243be-3dcc-439f-9955-6a62464f10db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/Kamli.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/Kamli2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/Kamli_Open.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/grass.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_down_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_down_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_down_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_down_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_left_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_left_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_right_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/pokechar_up_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/tile_0024.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/tile_0028.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets - Copy/wall.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Pokeball.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_down_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_down_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_down_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_down_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_left_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_left_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_left_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_left_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_right_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_right_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_right_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_right_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_up_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_up_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_up_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_up_4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/Hometown.tmx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/Pokemon fire red tileset.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/Pokemon gold tileset.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/Pokemon tileset 3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/Pokemon tileset 3.v1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/RPGpack_sheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/Tileset.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Maps/tilemap.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyTMX-3.21.7-py3.7.egg-info/PKG-INFO" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyTMX-3.21.7-py3.7.egg-info/SOURCES.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyTMX-3.21.7-py3.7.egg-info/dependency_links.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyTMX-3.21.7-py3.7.egg-info/installed-files.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyTMX-3.21.7-py3.7.egg-info/requires.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyTMX-3.21.7-py3.7.egg-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytmx/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytmx/pytmx.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytmx/util_pygame.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytmx/util_pyglet.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pytmx/util_pysdl2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.14.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.14.0.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.14.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.14.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.14.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.14.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/six.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/pokechar_down.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/pokechar_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/pokechar_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/pokechar_up.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/console.py" beforeDir="false" afterPath="$PROJECT_DIR$/console.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/Kamli.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/Kamli2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/Kamli_Open.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/grass.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_down_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_down_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_down_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_down_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_left_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_left_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_right_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/pokechar_up_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/tile_0024.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/tile_0028.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets - Copy/wall.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/pokechar_down_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/pokechar_down_2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/pokechar_down_4.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/pokechar_down_4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/pokechar_up_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/pokechar_up_2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/pokechar_up_4.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/pokechar_up_4.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/map.txt" beforeDir="false" afterPath="$PROJECT_DIR$/map.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sprites.py" beforeDir="false" afterPath="$PROJECT_DIR$/sprites.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tilemap.py" beforeDir="false" afterPath="$PROJECT_DIR$/tilemap.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,26 +175,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="147" key="#main/0.0.1920.1040@0.0.1920.1040" timestamp="1581316900379" />
-    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1581432417554">
+    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1581662287780">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581432417554" />
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom" timestamp="1581496267547">
+    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581662287780" />
+    <state width="1899" height="281" key="GridCell.Tab.0.bottom" timestamp="1581664099028">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1581496267547" />
-    <state width="1899" height="281" key="GridCell.Tab.0.center" timestamp="1581496267547">
+    <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1581664099028" />
+    <state width="1899" height="281" key="GridCell.Tab.0.center" timestamp="1581664099027">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1581496267547" />
-    <state width="1899" height="281" key="GridCell.Tab.0.left" timestamp="1581496267547">
+    <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1581664099027" />
+    <state width="1899" height="281" key="GridCell.Tab.0.left" timestamp="1581664099027">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1581496267547" />
-    <state width="1899" height="281" key="GridCell.Tab.0.right" timestamp="1581496267547">
+    <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1581664099027" />
+    <state width="1899" height="281" key="GridCell.Tab.0.right" timestamp="1581664099028">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1581496267547" />
+    <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1581664099028" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1581322980987">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -202,10 +211,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1581322980987" />
-    <state x="655" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1581490927023">
+    <state x="655" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1581659057983">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="655" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1581490927023" />
+    <state x="655" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1581659057983" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1581198553729">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
