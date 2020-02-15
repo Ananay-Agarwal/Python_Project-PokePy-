@@ -44,8 +44,14 @@ class Game:
                 if tile == 'P':
                     Grass(self, col, row)
                     self.player = Player(self, col, row)'''
-        self.player = Player(self, 20, 20)
+        for tile_object in self.map.tmxdata.objects:
+            #if tile_object.name == 'player':
+             #   self.player = Player(self, tile_object.x, tile_object.y)
+            if tile_object.name == 'wall':
+                Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
+        self.player = Player(self, 1304, 632)
         self.camera = Camera(self.map.width, self.map.height)
+        self.draw_debug = False
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -73,6 +79,9 @@ class Game:
         # self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+        if self.draw_debug:
+            for wall in self.walls:
+                pg.draw.rect(self.screen, GREEN, self.camera.apply_rect(wall.rect), 1)
         pg.display.flip()
 
     def quit(self):
@@ -87,6 +96,8 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.quit()
+                if event.key == pg.K_h:
+                    self.draw_debug = not self.draw_debug
 
     def show_start_screen(self):
         pass

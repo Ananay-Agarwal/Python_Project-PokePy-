@@ -11,7 +11,7 @@ class Player(pg.sprite.Sprite):
         self.image = game.player_img
         self.rect = self.image.get_rect()
         self.vel = vec(0, 0)
-        self.pos = vec(x, y) * TILESIZE
+        self.pos = vec(x, y)
         self.direction = 0
         self.counter = 0
 
@@ -88,6 +88,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
 
 
+# txt map wall class
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
@@ -102,6 +103,7 @@ class Wall(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 
+# txt map grass class
 class Grass(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.grass
@@ -113,3 +115,17 @@ class Grass(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+
+# tmx maps obstacle class for collision
+class Obstacle(pg.sprite.Sprite):
+    def __init__(self, game, x, y, w, h):
+        self.groups = game.walls
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.rect = pg.Rect(x, y, w, h)
+        self.hit_rect = self.rect
+        self.x = x
+        self.y = y
+        self.rect.x = x
+        self.rect.y = y
