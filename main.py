@@ -21,7 +21,7 @@ class Game:
         img_folder = path.join(game_folder, 'Assets')
         map_folder = path.join(img_folder, 'Maps')
         # self.map = Map(path.join(game_folder, 'map.txt'))
-        self.map = TiledMap(path.join(map_folder, 'Hometown.tmx'))
+        self.map = TiledMap(path.join(map_folder, MAP))
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
         self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()

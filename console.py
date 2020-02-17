@@ -14,7 +14,7 @@ FPS = 60
 TITLE = "PokePy"
 BGCOLOR = LIGHTGREY
 
-TILESIZE = 16
+TILESIZE = 32
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
@@ -23,3 +23,4 @@ PLAYER_SPEED = 300
 GRASS_IMG = 'grass.png'
 WALL_IMG = 'wall.png'
 PLAYER_IMG = 'pokechar_down_1.png'
+MAP = 'Hometown.tmx'
