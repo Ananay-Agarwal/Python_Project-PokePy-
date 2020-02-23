@@ -15,6 +15,7 @@ class Game:
         pg.display.set_icon(icon)
         self.clock = pg.time.Clock()
         self.load_data()
+        self.rooflist = [(486, 745), (544, 736), (608, 672), (672, 736), (734, 745)]
 
     def load_data(self):
         game_folder = path.dirname(__file__)

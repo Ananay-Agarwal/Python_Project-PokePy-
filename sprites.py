@@ -13,39 +13,33 @@ class Player(pg.sprite.Sprite):
         self.vel = vec(0, 0)
         self.pos = vec(x, y)
         self.direction = 0
-        self.counter = 0
+        self.animation_counter = 0
+        # initializing animation of player
+        self.image_left = ['pokechar_left_1.png', 'pokechar_left_2.png', 'pokechar_left_3.png', 'pokechar_left_4.png']
+        self.image_right = ['pokechar_right_1.png', 'pokechar_right_2.png', 'pokechar_right_3.png', 'pokechar_right_4.png']
+        self.image_up = ['pokechar_up_1.png', 'pokechar_up_2.png', 'pokechar_up_3.png', 'pokechar_up_4.png']
+        self.image_down = ['pokechar_down_1.png', 'pokechar_down_2.png', 'pokechar_down_3.png', 'pokechar_down_4.png']
 
     def get_keys(self):
         self.vel = vec(0, 0)
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
         keys = pg.key.get_pressed()
-        # initializing
-        image_left = ['pokechar_left_1.png', 'pokechar_left_2.png', 'pokechar_left_3.png', 'pokechar_left_4.png']
-        image_right = ['pokechar_right_1.png', 'pokechar_right_2.png', 'pokechar_right_3.png', 'pokechar_right_4.png']
-        image_up = ['pokechar_up_1.png', 'pokechar_up_2.png', 'pokechar_up_3.png', 'pokechar_up_4.png']
-        image_down = ['pokechar_down_1.png', 'pokechar_down_2.png', 'pokechar_down_3.png', 'pokechar_down_4.png']
-        self.counter += 1
-        self.counter %= 32
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, image_left[int(self.counter/8)])).convert_alpha()
             self.direction = 1
         elif keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, image_right[int(self.counter/8)])).convert_alpha()
             self.direction = 2
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel.y = -PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, image_up[int(self.counter/8)])).convert_alpha()
             self.direction = 3
         elif keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel.y = PLAYER_SPEED
-            self.image = pg.image.load(path.join(img_folder, image_down[int(self.counter/8)])).convert_alpha()
             self.direction = 4
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
-        # print(self.counter)
+        # print(self.animation_counter)
 
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -71,6 +65,19 @@ class Player(pg.sprite.Sprite):
         self.get_keys()
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
+        # counter used to travel between 4 states of animation png
+        self.animation_counter += 1
+        self.animation_counter %= 32
+        # Animation update
+        # changing player image based on direction and counter
+        if self.direction == 1:
+            self.image = pg.image.load(path.join(img_folder, self.image_left[int(self.animation_counter / 8)])).convert_alpha()
+        if self.direction == 2:
+            self.image = pg.image.load(path.join(img_folder, self.image_right[int(self.animation_counter / 8)])).convert_alpha()
+        if self.direction == 3:
+            self.image = pg.image.load(path.join(img_folder, self.image_up[int(self.animation_counter / 8)])).convert_alpha()
+        if self.direction == 4:
+            self.image = pg.image.load(path.join(img_folder, self.image_down[int(self.animation_counter / 8)])).convert_alpha()
         # check if player is idle
         if self.vel.x == 0 and self.vel.y == 0:
             if self.direction == 1:
@@ -129,3 +136,4 @@ class Obstacle(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x
         self.rect.y = y
+
