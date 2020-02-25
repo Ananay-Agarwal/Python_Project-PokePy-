@@ -36,12 +36,12 @@ def main():
         AAfilledRoundedRect(scr, (20, 30, 245, 50), (255, 255, 255), 0.5)
         AAfilledRoundedRect(scr, (290, 220, 245, 50), (255, 255, 255), 0.5)
         # pygame.draw.rect(scr, (255,255,255), (0, 290, 500, 109))
-        pok1 = image.load(r'C:\Users\harsh\OneDrive\Desktop\Python Project\pikachu.png')
-        pok2 = image.load(r'C:\Users\harsh\OneDrive\Desktop\Python Project\butterfee.png')
+        pok1 = pygame.image.load(r'C:\Users\harsh\OneDrive\Desktop\Python Project\pikachu.png')
+        pok2 = pygame.image.load(r'C:\Users\harsh\OneDrive\Desktop\Python Project\butterfee.png')
         scr.blit(pok1,(20,170))
         scr.blit(pok2,(290,30))
         AAfilledRoundedRect(scr, (1, 290, 548, 108), (255, 255, 255), 0.3)
-        display.update()
+        pygame.display.update()
         while event.wait().type != QUIT: pass
 main()
 
