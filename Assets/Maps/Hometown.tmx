@@ -169,7 +169,7 @@
   <object id="16" name="wall" x="26" y="1573" width="2182" height="27"/>
   <object id="17" name="wall" x="2214" y="0" width="26" height="1600"/>
   <object id="18" name="wall" x="1056" y="514" width="2" height="189"/>
-  <object id="19" name="wall" x="544" y="745" width="128" height="279"/>
+  <object id="19" name="wall" x="544" y="745" width="128" height="244"/>
   <object id="20" name="wall" x="672" y="745" width="64" height="198"/>
   <object id="21" name="wall" x="480" y="745" width="64" height="198"/>
   <object id="22" name="wall" x="491" y="945" width="42" height="47"/>

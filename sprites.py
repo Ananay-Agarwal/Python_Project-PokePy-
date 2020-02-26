@@ -31,14 +31,14 @@ class Player(pg.sprite.Sprite):
         elif keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = PLAYER_SPEED
             self.direction = 2
-        if keys[pg.K_UP] or keys[pg.K_w]:
+        elif keys[pg.K_UP] or keys[pg.K_w]:
             self.vel.y = -PLAYER_SPEED
             self.direction = 3
         elif keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel.y = PLAYER_SPEED
             self.direction = 4
-        if self.vel.x != 0 and self.vel.y != 0:
-            self.vel *= 0.7071
+        #if self.vel.x != 0 and self.vel.y != 0:
+         #   self.vel *= 0.7071
         # print(self.animation_counter)
 
     def collide_with_walls(self, dir):

@@ -82,7 +82,7 @@ class Game:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         if self.draw_debug:
             for wall in self.walls:
-                pg.draw.rect(self.screen, GREEN, self.camera.apply_rect(wall.rect), 1)
+                pg.draw.rect(self.screen, RED, self.camera.apply_rect(wall.rect), 1)
         pg.display.flip()
 
     def quit(self):

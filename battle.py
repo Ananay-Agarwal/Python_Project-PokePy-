@@ -1,5 +1,7 @@
 from pygame import *
-def AAfilledRoundedRect(surface,rect,color,radius=0.4):
+
+
+def AAfilledRoundedRect(surface, rect, color, radius=0.4):
     """
     AAfilledRoundedRect(surface,rect,color,radius=0.4)
     surface : destination
@@ -28,7 +30,9 @@ def AAfilledRoundedRect(surface,rect,color,radius=0.4):
     rectangle.fill((0, 0, 0), rect.inflate(0, -radius.h))
     rectangle.fill(color,special_flags=BLEND_RGBA_MAX)
     rectangle.fill((255,255,255,alpha),special_flags=BLEND_RGBA_MIN)
-    return surface.blit(rectangle,pos)
+    return surface.blit(rectangle, pos)
+
+
 def main():
         scr = display.set_mode((550, 400))
         BG = (255, 92, 51)
@@ -43,5 +47,7 @@ def main():
         AAfilledRoundedRect(scr, (1, 290, 548, 108), (255, 255, 255), 0.3)
         display.update()
         while event.wait().type != QUIT: pass
+
+
 main()
 
