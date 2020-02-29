@@ -17,6 +17,7 @@ class Game:
         pg.display.set_icon(icon)
         self.clock = pg.time.Clock()
         self.load_data()
+        self.battle = Battle()
 
     def load_data(self):
         game_folder = path.dirname(__file__)
@@ -33,7 +34,6 @@ class Game:
         # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
-        self.grass = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
             if tile_object.type == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
@@ -41,6 +41,7 @@ class Game:
                 self.player = Player(self, tile_object.x, tile_object.y)
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
+        self.battle_encounter = False
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -64,6 +65,10 @@ class Game:
         if self.draw_debug:
             for wall in self.walls:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(wall.rect), 1)
+            pg.draw.rect(self.screen, RED, self.camera.apply_rect(self.player.rect), 1)
+        if self.battle_encounter:
+            self.battle.load_battle()
+            self.new()
         pg.display.flip()
 
     def quit(self):
@@ -80,6 +85,9 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
+            if 585 <= self.player.pos.x <= 600 and self.player.pos.y == 989:
+                if event.key == pg.K_e:
+                    self.battle_encounter = not self.battle_encounter
 
     def show_start_screen(self):
         pass
@@ -91,4 +99,3 @@ gameobj.show_start_screen()
 while True:
     gameobj.new()
     gameobj.run()
-    gameobj.show_go_screen()

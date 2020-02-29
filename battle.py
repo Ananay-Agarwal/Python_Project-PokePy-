@@ -5,7 +5,8 @@ from os import path
 
 class Battle:
     def __init__(self):
-        self.health = 100
+        self.player_health = 60
+        self.opponent_health = 30
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
 
@@ -40,15 +41,15 @@ class Battle:
         rectangle.fill((255, 255, 255, alpha), special_flags=BLEND_RGBA_MIN)
         return surface.blit(rectangle, pos)
 
-    def draw_health(self, x, y, w, h):
-        self.health = 50
-        if self.health > 75:
+    def draw_health_bar(self, health, x, y, w, h):
+        health
+        if health > 75:
             col = GREEN
-        elif self.health > 40:
+        elif health > 40:
             col = YELLOW
         else:
             col = RED
-        width = int(w * self.health / 100)
+        width = int(w * health / 100)
         self.health_bar = Rect(x, y, width, h)
         draw.rect(self.scr, col, self.health_bar)
 
@@ -76,12 +77,15 @@ class Battle:
         self.AAfilledRoundedRect(self.scr, (540, 350, 450, 100), WHITE, 0.5)
 
         # drawing health bars
+        # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-        self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
+        self.draw_health_bar(self.opponent_health, 200, 90, 250, 10)
+
+        # player health bar
+        self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-        self.draw_health(200, 90, 250, 10)
-        self.draw_health(700, 410, 250, 10)
+        self.draw_health_bar(self.player_health, 700, 410, 250, 10)
 
         # loading pokemon sprites
         self.scr.blit(user_poke, (150, 350))
@@ -93,5 +97,6 @@ class Battle:
         while event.wait().type != QUIT and opp_hp != 0:
             pass
 
-obj = Battle()
-obj.load_battle()
+
+'''obj = Battle()
+obj.load_battle()'''

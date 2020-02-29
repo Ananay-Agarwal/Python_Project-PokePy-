@@ -1,6 +1,6 @@
 from os import path
 import pygame as pg
-from battle import load_battle
+from battle import *
 from console import *
 
 vec = pg.math.Vector2
@@ -23,6 +23,7 @@ class Player(pg.sprite.Sprite):
                             'pokechar_right_4.png']
         self.image_up = ['pokechar_up_1.png', 'pokechar_up_2.png', 'pokechar_up_3.png', 'pokechar_up_4.png']
         self.image_down = ['pokechar_down_1.png', 'pokechar_down_2.png', 'pokechar_down_3.png', 'pokechar_down_4.png']
+        self.battle = Battle()
 
     def get_keys(self):
         self.vel = vec(0, 0)
@@ -92,15 +93,12 @@ class Player(pg.sprite.Sprite):
                 self.image = pg.image.load(path.join(img_folder, 'pokechar_up_1.png')).convert_alpha()
             if self.direction == 4:
                 self.image = pg.image.load(path.join(img_folder, 'pokechar_down_1.png')).convert_alpha()
-        print(self.pos)
+        # print(self.pos)
         self.pos += self.vel * self.game.dt
         self.rect.x = self.pos.x
         self.collide_with_walls('x')
         self.rect.y = self.pos.y
         self.collide_with_walls('y')
-        if pg.K_w:
-            if 580 <= self.pos.x <= 605 and self.pos.y == 989:
-                load_battle()
 
 
 # tmx maps obstacle class for collision
