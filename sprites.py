@@ -1,7 +1,10 @@
 from os import path
 import pygame as pg
+from battle import load_battle
 from console import *
+
 vec = pg.math.Vector2
+
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -16,7 +19,8 @@ class Player(pg.sprite.Sprite):
         self.animation_counter = 0
         # initializing animation of player
         self.image_left = ['pokechar_left_1.png', 'pokechar_left_2.png', 'pokechar_left_3.png', 'pokechar_left_4.png']
-        self.image_right = ['pokechar_right_1.png', 'pokechar_right_2.png', 'pokechar_right_3.png', 'pokechar_right_4.png']
+        self.image_right = ['pokechar_right_1.png', 'pokechar_right_2.png', 'pokechar_right_3.png',
+                            'pokechar_right_4.png']
         self.image_up = ['pokechar_up_1.png', 'pokechar_up_2.png', 'pokechar_up_3.png', 'pokechar_up_4.png']
         self.image_down = ['pokechar_down_1.png', 'pokechar_down_2.png', 'pokechar_down_3.png', 'pokechar_down_4.png']
 
@@ -37,8 +41,8 @@ class Player(pg.sprite.Sprite):
         elif keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel.y = PLAYER_SPEED
             self.direction = 4
-        #if self.vel.x != 0 and self.vel.y != 0:
-         #   self.vel *= 0.7071
+        # if self.vel.x != 0 and self.vel.y != 0:
+        #   self.vel *= 0.7071
         # print(self.animation_counter)
 
     def collide_with_walls(self, dir):
@@ -71,13 +75,13 @@ class Player(pg.sprite.Sprite):
         # Animation update
         # changing player image based on direction and counter
         if self.direction == 1:
-            self.image = pg.image.load(path.join(img_folder, self.image_left[int(self.animation_counter / 8)])).convert_alpha()
+            self.image = pg.image.load(path.join(img_folder, self.image_left[int(self.animation_counter / 8)]))
         if self.direction == 2:
-            self.image = pg.image.load(path.join(img_folder, self.image_right[int(self.animation_counter / 8)])).convert_alpha()
+            self.image = pg.image.load(path.join(img_folder, self.image_right[int(self.animation_counter / 8)]))
         if self.direction == 3:
-            self.image = pg.image.load(path.join(img_folder, self.image_up[int(self.animation_counter / 8)])).convert_alpha()
+            self.image = pg.image.load(path.join(img_folder, self.image_up[int(self.animation_counter / 8)]))
         if self.direction == 4:
-            self.image = pg.image.load(path.join(img_folder, self.image_down[int(self.animation_counter / 8)])).convert_alpha()
+            self.image = pg.image.load(path.join(img_folder, self.image_down[int(self.animation_counter / 8)]))
         # check if player is idle
         if self.vel.x == 0 and self.vel.y == 0:
             if self.direction == 1:
@@ -88,40 +92,15 @@ class Player(pg.sprite.Sprite):
                 self.image = pg.image.load(path.join(img_folder, 'pokechar_up_1.png')).convert_alpha()
             if self.direction == 4:
                 self.image = pg.image.load(path.join(img_folder, 'pokechar_down_1.png')).convert_alpha()
+        print(self.pos)
         self.pos += self.vel * self.game.dt
         self.rect.x = self.pos.x
         self.collide_with_walls('x')
         self.rect.y = self.pos.y
         self.collide_with_walls('y')
-
-
-# txt map wall class
-class Wall(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.walls
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image = game.wall_img
-        self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
-
-
-# txt map grass class
-class Grass(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.grass
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = game.grass_img
-        self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        if pg.K_w:
+            if 580 <= self.pos.x <= 605 and self.pos.y == 989:
+                load_battle()
 
 
 # tmx maps obstacle class for collision
@@ -136,4 +115,3 @@ class Obstacle(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x
         self.rect.y = y
-

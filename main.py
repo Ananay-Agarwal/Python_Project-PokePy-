@@ -4,6 +4,8 @@ from console import *
 from sprites import *
 from os import path
 from tilemap import *
+from battle import *
+
 
 class Game:
 
@@ -15,13 +17,11 @@ class Game:
         pg.display.set_icon(icon)
         self.clock = pg.time.Clock()
         self.load_data()
-        self.rooflist = [(486, 745), (544, 736), (608, 672), (672, 736), (734, 745)]
 
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
         map_folder = path.join(img_folder, 'Maps')
-        # self.map = Map(path.join(game_folder, 'map.txt'))
         self.map = TiledMap(path.join(map_folder, 'Hometown.tmx'))
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
@@ -34,23 +34,11 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.grass = pg.sprite.Group()
-        '''for row, tiles in enumerate(self.map.data):
-            for col, tile in enumerate(tiles):
-                if tile == '1':
-                    Wall(self, col, row)
-                if tile == '.':
-                    Grass(self, col, row)
-        for row, tiles in enumerate(self.map.data):
-            for col, tile in enumerate(tiles):
-                if tile == 'P':
-                    Grass(self, col, row)
-                    self.player = Player(self, col, row)'''
         for tile_object in self.map.tmxdata.objects:
-            #if tile_object.name == 'player':
-             #   self.player = Player(self, tile_object.x, tile_object.y)
-            if tile_object.name == 'wall':
+            if tile_object.type == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-        self.player = Player(self, 1304, 632)
+            if tile_object.name == 'player':
+                self.player = Player(self, tile_object.x, tile_object.y)
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
 
@@ -68,16 +56,9 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
 
-    def draw_grid(self):
-        for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-        for y in range(0, HEIGHT, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
-
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect))
-        # self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         if self.draw_debug:
@@ -101,9 +82,6 @@ class Game:
                     self.draw_debug = not self.draw_debug
 
     def show_start_screen(self):
-        pass
-
-    def show_go_screen(self):
         pass
 
 
