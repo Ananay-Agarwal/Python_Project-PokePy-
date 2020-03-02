@@ -7,6 +7,8 @@ class Battle:
     def __init__(self):
         self.player_health = 60
         self.opponent_health = 30
+        self.user_poke_name = 'onix'
+        self.opp_poke_name = 'charmender'
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
 
@@ -60,8 +62,9 @@ class Battle:
 
         bg_img = image.load(path.join(poke_folder, 'battle_background.png'))
         bg_img2 = image.load(path.join(poke_folder, 'dialogbox_background.png'))
-        user_poke = image.load(path.join(poke_folder, 'bulbasaur_back.png'))
-        opp_poke = image.load(path.join(poke_folder, 'bulbasaur_front.png'))
+
+        user_poke = image.load(path.join(poke_folder, self.user_poke_name+'_back.png'))
+        opp_poke = image.load(path.join(poke_folder, self.opp_poke_name+'_front.png'))
 
         self.scr.blit(bg_img, (0, 0))  # loading background
         for i in range(0, 871, 290):  # loading lower background
@@ -88,7 +91,7 @@ class Battle:
         self.draw_health_bar(self.player_health, 700, 410, 250, 10)
 
         # loading pokemon sprites
-        self.scr.blit(user_poke, (150, 350))
+        self.scr.blit(user_poke, (150, 225))
         self.scr.blit(opp_poke, (690, 140))
 
         # loading main dialog box

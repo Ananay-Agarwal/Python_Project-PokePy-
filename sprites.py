@@ -2,6 +2,7 @@ from os import path
 import pygame as pg
 from battle import *
 from console import *
+import random
 
 vec = pg.math.Vector2
 
@@ -24,6 +25,7 @@ class Player(pg.sprite.Sprite):
         self.image_up = ['pokechar_up_1.png', 'pokechar_up_2.png', 'pokechar_up_3.png', 'pokechar_up_4.png']
         self.image_down = ['pokechar_down_1.png', 'pokechar_down_2.png', 'pokechar_down_3.png', 'pokechar_down_4.png']
         self.battle = Battle()
+        self.encounter_chance = 0
 
     def get_keys(self):
         self.vel = vec(0, 0)
@@ -72,6 +74,8 @@ class Player(pg.sprite.Sprite):
         img_folder = path.join(game_folder, 'Assets')
         # counter used to travel between 4 states of animation png
         self.animation_counter += 1
+        if self.animation_counter % 8 == 0:
+            self.encounter_chance = random.randint(0, 9)
         self.animation_counter %= 32
         # Animation update
         # changing player image based on direction and counter
@@ -83,6 +87,7 @@ class Player(pg.sprite.Sprite):
             self.image = pg.image.load(path.join(img_folder, self.image_up[int(self.animation_counter / 8)]))
         if self.direction == 4:
             self.image = pg.image.load(path.join(img_folder, self.image_down[int(self.animation_counter / 8)]))
+
         # check if player is idle
         if self.vel.x == 0 and self.vel.y == 0:
             if self.direction == 1:
