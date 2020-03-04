@@ -1,8 +1,7 @@
-from os import path
 import pygame as pg
+
 from battle import *
 from console import *
-import random
 
 vec = pg.math.Vector2
 
@@ -29,8 +28,6 @@ class Player(pg.sprite.Sprite):
 
     def get_keys(self):
         self.vel = vec(0, 0)
-        game_folder = path.dirname(__file__)
-        img_folder = path.join(game_folder, 'Assets')
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -PLAYER_SPEED

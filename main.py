@@ -1,10 +1,5 @@
-import pygame as pg
-import sys
-from console import *
 from sprites import *
-from os import path
 from tilemap import *
-from battle import *
 
 
 class Game:
@@ -69,7 +64,7 @@ class Game:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(wall.rect), 1)
             pg.draw.rect(self.screen, RED, self.camera.apply_rect(self.player.rect), 1)
         if self.battle_encounter:
-            self.battle.load_battle()
+            self.battle.start_battle()
             self.new()
         pg.display.flip()
 

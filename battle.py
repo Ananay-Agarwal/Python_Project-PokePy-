@@ -2,17 +2,23 @@ from pygame import *
 from console import *
 from os import path
 import random
+import pygame
+import sys
+pygame.init()
+
+font = pygame.font.SysFont('sans', 32)
 
 
 class Battle:
     def __init__(self):
-        self.player_health = 60
-        self.opponent_health = 30
-        self.user_poke_name = 'onix'
-        self.opp_poke_name = 'pidgey'
+        self.battle_playing = True
+        self.player_health = 100
+        self.opponent_health = 100
+        self.player_poke_name = 'Charmender'
+        self.opp_poke_name = 'Bulbasaur'
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
-        self.pokemon_list = ['bulbasaur', 'charmender', 'squirtle', 'pidgey', 'pikachu', 'onix']
+        self.pokemon_list = ['Bulbasaur', 'Charmender', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
 
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
@@ -46,7 +52,6 @@ class Battle:
         return surface.blit(rectangle, pos)
 
     def draw_health_bar(self, health, x, y, w, h):
-        health
         if health > 75:
             col = GREEN
         elif health > 40:
@@ -54,21 +59,23 @@ class Battle:
         else:
             col = RED
         width = int(w * health / 100)
-        self.health_bar = Rect(x, y, width, h)
-        draw.rect(self.scr, col, self.health_bar)
+        health_bar = Rect(x, y, width, h)
+        draw.rect(self.scr, col, health_bar)
+
+    def print_text(self, msg, x, y, colour):
+        text = font.render(msg, True, colour)
+        self.scr.blit(text, [x, y])
 
     def load_battle(self):
         self.opp_poke_name = random.choice(self.pokemon_list)
-
-        opp_hp = 100
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
 
         bg_img = image.load(path.join(poke_folder, 'battle_background.png'))
         bg_img2 = image.load(path.join(poke_folder, 'dialogbox_background.png'))
 
-        user_poke = image.load(path.join(poke_folder, self.user_poke_name+'_back.png'))
-        opp_poke = image.load(path.join(poke_folder, self.opp_poke_name+'_front.png'))
+        user_poke = image.load(path.join(poke_folder, self.player_poke_name + '_back.png'))
+        opp_poke = image.load(path.join(poke_folder, self.opp_poke_name + '_front.png'))
 
         self.scr.blit(bg_img, (0, 0))  # loading background
         for i in range(0, 871, 290):  # loading lower background
@@ -83,6 +90,10 @@ class Battle:
         self.AAfilledRoundedRect(self.scr, (30, 30, 450, 100), WHITE, 0.5)
         self.AAfilledRoundedRect(self.scr, (540, 350, 450, 100), WHITE, 0.5)
 
+        # printing details
+        self.print_text(self.player_poke_name, 570, 360, BLACK)
+        self.print_text(self.opp_poke_name, 60, 40, BLACK)
+
         # drawing health bars
         # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
@@ -95,15 +106,34 @@ class Battle:
         self.draw_health_bar(self.player_health, 700, 410, 250, 10)
 
         # loading pokemon sprites
-        self.scr.blit(user_poke, (150, 478-user_poke.get_height()))
-        self.scr.blit(opp_poke, (700, 270-opp_poke.get_height()))
+        self.scr.blit(user_poke, (150, 478 - user_poke.get_height()))
+        self.scr.blit(opp_poke, (700, 270 - opp_poke.get_height()))
 
         # loading main dialog box
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         display.update()
-        while event.wait().type != QUIT and opp_hp != 0:
-            pass
+        while event.wait().type != QUIT and self.opponent_health != 0 and self.player_health != 0 and pygame.event != pygame.K_ESCAPE:
+           pass
+
+    def battle_run(self):
+        # game loop - set self.playing = False to end the game
+        while self.battle_playing:
+            self.battle_events()
+            # self.update()
+            # self.draw()
+
+    def quit_battle(self):
+        self.battle_playing = False
+
+    def battle_events(self):
+        # catch all events here
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.quit_battle()
+
+    def start_battle(self):
+        self.load_battle()
 
 
 '''obj = Battle()
-obj.load_battle()'''
+obj.start_battle()'''
