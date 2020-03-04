@@ -1,6 +1,7 @@
 from pygame import *
 from console import *
 from os import path
+import random
 
 
 class Battle:
@@ -8,9 +9,10 @@ class Battle:
         self.player_health = 60
         self.opponent_health = 30
         self.user_poke_name = 'onix'
-        self.opp_poke_name = 'charmender'
+        self.opp_poke_name = 'pidgey'
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
+        self.pokemon_list = ['bulbasaur', 'charmender', 'squirtle', 'pidgey', 'pikachu', 'onix']
 
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
@@ -56,6 +58,8 @@ class Battle:
         draw.rect(self.scr, col, self.health_bar)
 
     def load_battle(self):
+        self.opp_poke_name = random.choice(self.pokemon_list)
+
         opp_hp = 100
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
@@ -91,8 +95,8 @@ class Battle:
         self.draw_health_bar(self.player_health, 700, 410, 250, 10)
 
         # loading pokemon sprites
-        self.scr.blit(user_poke, (150, 225))
-        self.scr.blit(opp_poke, (690, 140))
+        self.scr.blit(user_poke, (150, 478-user_poke.get_height()))
+        self.scr.blit(opp_poke, (700, 270-opp_poke.get_height()))
 
         # loading main dialog box
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
