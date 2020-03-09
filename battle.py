@@ -8,6 +8,7 @@ import sys
 
 conn = sqlite3.connect('PokePy.db')
 cursor = conn.cursor()
+attack_cursor = conn.cursor()
 pygame.init()
 
 font = pygame.font.SysFont('sans', 32)
@@ -18,11 +19,14 @@ class Battle:
         self.battle_playing = True
         self.attack_selected = False
 
-        self.pokemon_list = ['Bulbasaur', 'Charmender', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
-        self.player_poke_name = 'Charmender'
+        self.pokemon_list = ['Bulbasaur', 'Charmander', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
+        self.player_poke_name = 'Pikachu'
         self.opp_poke_name = random.choice(self.pokemon_list)
-        cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)', (self.opp_poke_name,))
-        self.opponent_health = list(int(record[0])for record in cursor.fetchall()).pop()
+        self.opponent_health=0
+        self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)', (self.opp_poke_name,)).fetchall()
+        for health in self.opp_health:
+            self.opponent_health = int(health[0])
+        #list(int(record[0])for record in cursor.fetchall()).pop()
         self.player_health = 100
         self.max_player_health = self.player_health  # fetch
         self.max_opponent_health = self.opponent_health  # fetch
@@ -121,8 +125,11 @@ class Battle:
 
         # loading main dialog box
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("Choose attack", 500, 520, WHITE)
-
+        self.print_text("A wild Pokemon has appeared!! what do you want to do?", 20, 500, WHITE)
+        self.print_text("1. Attack", 20, 550, WHITE)
+        self.print_text("2. Flee", 180, 550, WHITE)
+        self.print_text("3. Inventory", 20, 590, WHITE)
+        self.print_text("4. Shop", 200, 590, WHITE)
         display.update()
         self.battle_run()
         # while event.wait().type != QUIT and self.opponent_health != 0 and self.player_health != 0 and pygame.event != pygame.K_ESCAPE:
@@ -150,20 +157,22 @@ class Battle:
                 if not self.attack_selected:
                     if event.key == pygame.K_1:
                         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                        self.print_text("Attack 1", 700, 520, WHITE)
-                        self.print_text("Attack 2", 850, 520, WHITE)
-                        self.print_text("Attack 3", 700, 620, WHITE)
-                        self.print_text("Attack 4", 850, 620, WHITE)
+                        x = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from Pokemon where 
+                                                  Pokemon_Name=(?)''', (self.player_poke_name,)).fetchall()
+                        print(x)
+                        self.print_text("1."+x[0][0], 630, 520, WHITE)
+                        self.print_text("2."+x[0][1], 850, 520, WHITE)
+                        self.print_text("3."+x[0][2], 630, 620, WHITE)
+                        self.print_text("4."+x[0][3], 830, 620, WHITE)
                         self.attack_selected = True
                     if event.key == pygame.K_2:
-                        print('2')
                         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                         self.print_text("Items opened", 500, 520, WHITE)
                 else:
                     if event.key == pygame.K_1:
                         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                         self.print_text("Attack 1 used", 20, 520, WHITE)
-                        print('12')
+
 
     def start_battle(self):
         self.battle_playing = True
@@ -171,5 +180,5 @@ class Battle:
         self.print_text("Choose attack", 500, 520, WHITE)
 
 
-'''obj = Battle()
-obj.start_battle()'''
+obj = Battle()
+obj.start_battle()
