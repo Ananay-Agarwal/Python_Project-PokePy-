@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d5f243be-3dcc-439f-9955-6a62464f10db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/pokechar_down_initial.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Python_Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Python_Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Maps/Hometown.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Maps/Hometown.tmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sprites.py" beforeDir="false" afterPath="$PROJECT_DIR$/sprites.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/battle.py" beforeDir="false" afterPath="$PROJECT_DIR$/battle.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,13 +36,35 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Ananay Agarwal\Documents\GitHub\Python_Project\Assets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.battle">
+    <configuration name="battle" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Python_Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/battle.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="console" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Python_Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -57,6 +78,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/console.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="database" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Python_Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/database.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -88,6 +130,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.battle" />
+        <item itemvalue="Python.database" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.console" />
       </list>
@@ -134,21 +178,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581764696029" />
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom" timestamp="1582464075301">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1515" height="206" key="GridCell.Tab.0.bottom" timestamp="1583772256211">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1515" height="206" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583772256211" />
     <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1582464075301" />
-    <state width="1899" height="281" key="GridCell.Tab.0.center" timestamp="1582464075301">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1515" height="206" key="GridCell.Tab.0.center" timestamp="1583772256211">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1515" height="206" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1583772256211" />
     <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1582464075301" />
-    <state width="1899" height="281" key="GridCell.Tab.0.left" timestamp="1582464075301">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1515" height="206" key="GridCell.Tab.0.left" timestamp="1583772256211">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1515" height="206" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1583772256211" />
     <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1582464075301" />
-    <state width="1899" height="281" key="GridCell.Tab.0.right" timestamp="1582464075301">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1515" height="206" key="GridCell.Tab.0.right" timestamp="1583772256211">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1515" height="206" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583772256211" />
     <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582464075301" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1581322980987">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -166,6 +214,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1581322980987" />
+    <state x="277" y="56" key="SettingsEditor" timestamp="1583767096792">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="277" y="56" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1583767096792" />
     <state x="655" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1582454856080">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

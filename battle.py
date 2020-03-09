@@ -165,13 +165,9 @@ class Battle:
                         print('12')
 
     def start_battle(self):
-        self.battle_playing = True
         self.load_battle()
-<<<<<<< HEAD
         self.print_text("Choose attack", 500, 520, WHITE)
-=======
 
->>>>>>> 48e84e15a4b906e1b770919cab0e541637ea4f9c
-# run the module on it's own
-'''obj = Battle()
-obj.start_battle()'''
+
+obj = Battle()
+obj.start_battle()
