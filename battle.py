@@ -17,15 +17,18 @@ class Battle:
     def __init__(self):
         self.battle_playing = True
         self.attack_selected = False
-        self.player_health = 100
-        self.max_player_health = 300  # fetch
-        self.max_opponent_health = 300  # fetch
+
         self.pokemon_list = ['Bulbasaur', 'Charmender', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
         self.player_poke_name = 'Charmender'
         self.opp_poke_name = random.choice(self.pokemon_list)
-        cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',(self.opp_poke_name,))
+        self.opponent_health=0
+        cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)', (self.opp_poke_name,))
         for record in cursor.fetchall():
             self.opponent_health = int(record[0])
+        self.player_health = 100
+        self.max_player_health = self.player_health  # fetch
+        self.max_opponent_health = self.opponent_health  # fetch
+
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
 
@@ -76,7 +79,7 @@ class Battle:
         self.scr.blit(text, [x, y])
 
     def load_battle(self):
-        # self.opp_poke_name = random.choice(self.pokemon_list)
+        self.opp_poke_name = random.choice(self.pokemon_list)
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
 
@@ -165,9 +168,10 @@ class Battle:
                         print('12')
 
     def start_battle(self):
+        self.battle_playing = True
         self.load_battle()
         self.print_text("Choose attack", 500, 520, WHITE)
 
 
-obj = Battle()
-obj.start_battle()
+'''obj = Battle()
+obj.start_battle()'''
