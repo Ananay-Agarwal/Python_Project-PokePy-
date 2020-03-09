@@ -12,8 +12,11 @@ font = pygame.font.SysFont('sans', 32)
 class Battle:
     def __init__(self):
         self.battle_playing = True
+        self.attack_selected = False
         self.player_health = 100
         self.opponent_health = 100
+        self.max_player_health = 169  #fetch
+        self.max_opponent_health = 420  #fetch
         self.player_poke_name = 'Charmender'
         self.opp_poke_name = 'Bulbasaur'
         self.scr = display.set_mode((1024, 768))
@@ -51,14 +54,14 @@ class Battle:
         rectangle.fill((255, 255, 255, alpha), special_flags=BLEND_RGBA_MIN)
         return surface.blit(rectangle, pos)
 
-    def draw_health_bar(self, health, x, y, w, h):
-        if health > 75:
+    def draw_health_bar(self, health,max_health,  x, y, w, h):
+        if health > (0.75*max_health):
             col = GREEN
-        elif health > 40:
+        elif health > (0.40*max_health):
             col = YELLOW
         else:
             col = RED
-        width = int(w * health / 100)
+        width = int(w * health / max_health)
         health_bar = Rect(x, y, width, h)
         draw.rect(self.scr, col, health_bar)
 
@@ -98,12 +101,12 @@ class Battle:
         # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-        self.draw_health_bar(self.opponent_health, 200, 90, 250, 10)
+        self.draw_health_bar(self.opponent_health,self.max_opponent_health ,200, 90, 250, 10)
 
         # player health bar
         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-        self.draw_health_bar(self.player_health, 700, 410, 250, 10)
+        self.draw_health_bar(self.player_health,self.max_player_health, 700, 410, 250, 10)
 
         # loading pokemon sprites
         self.scr.blit(user_poke, (150, 478 - user_poke.get_height()))
@@ -111,29 +114,57 @@ class Battle:
 
         # loading main dialog box
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.print_text("Choose attack", 500, 520, WHITE)
+
         display.update()
-        while event.wait().type != QUIT and self.opponent_health != 0 and self.player_health != 0 and pygame.event != pygame.K_ESCAPE:
-           pass
+        self.battle_run()
+        # while event.wait().type != QUIT and self.opponent_health != 0 and self.player_health != 0 and pygame.event != pygame.K_ESCAPE:
+        #    pass
 
     def battle_run(self):
         # game loop - set self.playing = False to end the game
         while self.battle_playing:
             self.battle_events()
-            # self.update()
+            self.battle_update()
             # self.draw()
 
     def quit_battle(self):
         self.battle_playing = False
+
+    def battle_update(self):
+        display.update()
 
     def battle_events(self):
         # catch all events here
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit_battle()
+            elif event.type == pygame.KEYDOWN:
+                if not self.attack_selected:
+                    if event.key == pygame.K_1:
+                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                        self.print_text("Attack 1", 700, 520, WHITE)
+                        self.print_text("Attack 2", 850, 520, WHITE)
+                        self.print_text("Attack 3", 700, 620, WHITE)
+                        self.print_text("Attack 4", 850, 620, WHITE)
+                        self.attack_selected = True
+                    if event.key == pygame.K_2:
+                        print('2')
+                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                        self.print_text("Items opened", 500, 520, WHITE)
+                else:
+                    if event.key == pygame.K_1:
+                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                        self.print_text("Attack 1 used", 20, 520, WHITE)
+                        print('12')
+
+
+
 
     def start_battle(self):
         self.load_battle()
+        self.print_text("Choose attack",500,520,WHITE)
 
 
-'''obj = Battle()
-obj.start_battle()'''
+obj = Battle()
+obj.start_battle()
