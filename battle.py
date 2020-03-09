@@ -171,41 +171,41 @@ class Battle:
                         if event.key == pygame.K_1:
                             self.player_attack(x,0)
                             time.delay(1000)
-                            self.check_health()
-                            time.delay(1000)
+                            # self.check_health()
+                            # time.delay(1000)
                             self.opponent_attack()
-                            time.delay(1000)
-                            self.check_health()
+                            # time.delay(1000)
+                            # self.check_health()
                             time.delay(1000)
                             self.display_attacks(x)
                         elif event.key == pygame.K_2:
                                 self.player_attack(x, 1)
                                 time.delay(1000)
-                                self.check_health()
-                                time.delay(1000)
+                                # self.check_health()
+                                # time.delay(1000)
                                 self.opponent_attack()
-                                time.delay(1000)
-                                self.check_health()
+                                # time.delay(1000)
+                                # self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
                         elif event.key == pygame.K_3:
                                 self.player_attack(x, 2)
                                 time.delay(1000)
-                                self.check_health()
-                                time.delay(1000)
+                                # self.check_health()
+                                # time.delay(1000)
                                 self.opponent_attack()
-                                time.delay(1000)
-                                self.check_health()
+                                # time.delay(1000)
+                                # self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
                         elif event.key == pygame.K_4:
                                 self.player_attack(x, 3)
                                 time.delay(1000)
-                                self.check_health()
-                                time.delay(1000)
+                                #self.check_health()
+                                #time.delay(1000)
                                 self.opponent_attack()
-                                time.delay(1000)
-                                self.check_health()
+                                #time.delay(1000)
+                                #self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
 
@@ -217,42 +217,6 @@ class Battle:
         self.print_text("4." + x[0][3], 830, 620, WHITE)
         self.attack_selected = True
 
-    def check_health(self):
-
-        if self.opponent_health <= 0:
-
-            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-
-            self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-            self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-            self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
-
-            self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
-            self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-
-            self.print_text("You Won!!", 20, 520, WHITE)
-            display.update()
-            time.delay(1000)
-            #pygame.quit()
-            #Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
-        elif self.player_health <= 0:
-
-            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-
-            self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
-            self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-            self.draw_health_bar(1, self.max_player_health, 700, 410, 250, 10)
-
-            self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-            self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-            self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
-
-            self.print_text("Stupid!! You Lost", 20, 520, WHITE)
-            display.update()
-            time.delay(1000)
-            #pygame.quit()
-            # Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
 
     def player_attack(self,x,i):
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
@@ -264,16 +228,24 @@ class Battle:
         self.opponent_health -= self.hp_to_reduce
         print(self.opponent_health)
         self.attack_selected = False
-        # opponent health bar
-        self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-        self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-        self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
-
         # player health bar
         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
         self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-        display.update()
+
+        # opponent health bar
+        self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
+        self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
+        if self.opponent_health>=1:
+            self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
+            display.update()
+        else:
+            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            self.print_text("You Won!!", 20, 520, WHITE)
+            self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
+            display.update()
+            time.delay(500)
+            pygame.quit()
 
     def opponent_attack(self):
         y = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
@@ -300,9 +272,16 @@ class Battle:
         # player health bar
         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-        self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-        display.update()
-
+        if self.player_health>=1:
+            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+            display.update()
+        else:
+            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            self.print_text("You Lost!!", 20, 520, WHITE)
+            self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
+            display.update()
+            time.delay(500)
+            pygame.quit()
     def start_battle(self):
         self.battle_playing = True
         self.load_battle()
@@ -310,3 +289,42 @@ class Battle:
 
 #obj = Battle()
 #obj.start_battle()
+ #     def check_health(self):
+
+    #
+    #     if self.opponent_health <= 0:
+    #
+    #         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+    #
+    #         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
+    #         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
+    #         self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
+    #
+    #         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
+    #         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
+    #         self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+    #
+    #         self.print_text("You Won!!", 20, 520, WHITE)
+    #         display.update()
+    #         time.delay(1000)
+    #         # pygame.quit()
+    #         sys.exit()
+    #         #Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
+    #     elif self.player_health <= 0:
+    #
+    #         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+    #
+    #         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
+    #         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
+    #         self.draw_health_bar(1, self.max_player_health, 700, 410, 250, 10)
+    #
+    #         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
+    #         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
+    #         self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
+    #
+    #         self.print_text("Stupid!! You Lost", 20, 520, WHITE)
+    #         display.update()
+    #         time.delay(1000)
+    #         #pygame.quit()
+    #         # Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
+
