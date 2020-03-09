@@ -5,6 +5,7 @@ import random
 import pygame
 import sqlite3
 import sys
+
 conn = sqlite3.connect('PokePy.db')
 cursor = conn.cursor()
 pygame.init()
@@ -17,14 +18,16 @@ class Battle:
         self.battle_playing = True
         self.attack_selected = False
         self.player_health = 100
-        self.opponent_health = 100
-        self.max_player_health = 169  #fetch
-        self.max_opponent_health = 420  #fetch
+        self.max_player_health = 300  # fetch
+        self.max_opponent_health = 300  # fetch
+        self.pokemon_list = ['Bulbasaur', 'Charmender', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
         self.player_poke_name = 'Charmender'
-        self.opp_poke_name = 'Bulbasaur'
+        self.opp_poke_name = random.choice(self.pokemon_list)
+        cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',(self.opp_poke_name,))
+        for record in cursor.fetchall():
+            self.opponent_health = int(record[0])
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
-        self.pokemon_list = ['Bulbasaur', 'Charmender', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
 
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
@@ -57,10 +60,10 @@ class Battle:
         rectangle.fill((255, 255, 255, alpha), special_flags=BLEND_RGBA_MIN)
         return surface.blit(rectangle, pos)
 
-    def draw_health_bar(self, health,max_health,  x, y, w, h):
-        if health > (0.75*max_health):
+    def draw_health_bar(self, health, max_health, x, y, w, h):
+        if health > (0.75 * max_health):
             col = GREEN
-        elif health > (0.40*max_health):
+        elif health > (0.40 * max_health):
             col = YELLOW
         else:
             col = RED
@@ -73,7 +76,7 @@ class Battle:
         self.scr.blit(text, [x, y])
 
     def load_battle(self):
-        self.opp_poke_name = random.choice(self.pokemon_list)
+        # self.opp_poke_name = random.choice(self.pokemon_list)
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
 
@@ -104,12 +107,12 @@ class Battle:
         # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-        self.draw_health_bar(self.opponent_health,self.max_opponent_health ,200, 90, 250, 10)
+        self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
 
         # player health bar
         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-        self.draw_health_bar(self.player_health,self.max_player_health, 700, 410, 250, 10)
+        self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
 
         # loading pokemon sprites
         self.scr.blit(user_poke, (150, 478 - user_poke.get_height()))
@@ -161,13 +164,10 @@ class Battle:
                         self.print_text("Attack 1 used", 20, 520, WHITE)
                         print('12')
 
-
-
-
     def start_battle(self):
+        self.battle_playing = True
         self.load_battle()
-        self.print_text("Choose attack",500,520,WHITE)
-
-
-obj = Battle()
-obj.start_battle()
+        self.print_text("Choose attack", 500, 520, WHITE)
+# run the module on it's own
+'''obj = Battle()
+obj.start_battle()'''
