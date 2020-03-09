@@ -180,5 +180,5 @@ class Battle:
         self.print_text("Choose attack", 500, 520, WHITE)
 
 
-obj = Battle()
-obj.start_battle()
+'''obj = Battle()
+obj.start_battle()'''
