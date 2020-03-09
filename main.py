@@ -38,7 +38,6 @@ class Game:
                 self.player = Player(self, self.player.pos.x, self.player.pos.y)
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
-        self.battle_encounter = False
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -66,6 +65,7 @@ class Game:
         if self.battle_encounter:
             self.battle.start_battle()
             self.new()
+            self.battle_encounter = False
         pg.display.flip()
 
     def quit(self):
@@ -84,7 +84,7 @@ class Game:
                     self.draw_debug = not self.draw_debug
             if 1400 <= self.player.pos.x <= 1800 and 1200 <= self.player.pos.y <= 1550:
                 if self.player.encounter_chance > 8 and (self.player.vel.x != 0 or self.player.vel.y != 0):
-                    self.battle_encounter = not self.battle_encounter
+                    self.battle_encounter = True
 
     def show_start_screen(self):
         pass
