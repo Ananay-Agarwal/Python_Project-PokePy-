@@ -3,7 +3,10 @@ from console import *
 from os import path
 import random
 import pygame
+import sqlite3
 import sys
+conn = sqlite3.connect('PokePy.db')
+cursor = conn.cursor()
 pygame.init()
 
 font = pygame.font.SysFont('sans', 32)
