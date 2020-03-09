@@ -21,10 +21,8 @@ class Battle:
         self.pokemon_list = ['Bulbasaur', 'Charmender', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
         self.player_poke_name = 'Charmender'
         self.opp_poke_name = random.choice(self.pokemon_list)
-        self.opponent_health=0
         cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)', (self.opp_poke_name,))
-        for record in cursor.fetchall():
-            self.opponent_health = int(record[0])
+        self.opponent_health = list(int(record[0])for record in cursor.fetchall()).pop()
         self.player_health = 100
         self.max_player_health = self.player_health  # fetch
         self.max_opponent_health = self.opponent_health  # fetch
