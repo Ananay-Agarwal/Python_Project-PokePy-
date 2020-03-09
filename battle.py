@@ -9,6 +9,7 @@ import sys
 conn = sqlite3.connect('PokePy.db')
 cursor = conn.cursor()
 attack_cursor = conn.cursor()
+hp_cursor = conn.cursor()
 pygame.init()
 
 font = pygame.font.SysFont('sans', 32)
@@ -154,12 +155,12 @@ class Battle:
             if event.type == pygame.QUIT:
                 self.quit_battle()
             elif event.type == pygame.KEYDOWN:
+                x = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from Pokemon where 
+                                                                                     Pokemon_Name=(?)''',
+                                          (self.player_poke_name,)).fetchall()
                 if not self.attack_selected:
                     if event.key == pygame.K_1:
                         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                        x = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from Pokemon where 
-                                                  Pokemon_Name=(?)''', (self.player_poke_name,)).fetchall()
-                        print(x)
                         self.print_text("1."+x[0][0], 630, 520, WHITE)
                         self.print_text("2."+x[0][1], 850, 520, WHITE)
                         self.print_text("3."+x[0][2], 630, 620, WHITE)
@@ -171,13 +172,28 @@ class Battle:
                 else:
                     if event.key == pygame.K_1:
                         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                        self.print_text("Attack 1 used", 20, 520, WHITE)
+                        self.print_text("Pikachu used "+x[0][0], 20, 520, WHITE)
+                        self.hp = hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)', (x[0][0] ,)).fetchall()
+                        for hp in self.hp:
+                            self.hp_to_reduce = int(hp[0])
+                        self.opponent_health-= self.hp_to_reduce
+                        print(self.opponent_health)
+                        self.attack_selected = False
+                        # opponent health bar
+                        self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
+                        self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
+                        self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
+
+                        # player health bar
+                        self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
+                        self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
+                        self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
 
 
     def start_battle(self):
         self.battle_playing = True
         self.load_battle()
-        self.print_text("Choose attack", 500, 520, WHITE)
+
 
 
 obj = Battle()
