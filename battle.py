@@ -38,6 +38,7 @@ class Battle:
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
 
+
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
         AAfilledRoundedRect(surface,rect,color,radius=0.4)

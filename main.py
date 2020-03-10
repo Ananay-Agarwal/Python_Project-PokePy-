@@ -1,9 +1,9 @@
 from sprites import *
 from tilemap import *
-
+from playsound import playsound
 
 class Game:
-
+    playsound('background_music.mp3')
     def __init__(self):
         pg.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -15,6 +15,7 @@ class Game:
         self.battle = Battle()
         self.draw_debug = False
         self.battle_encounter = False
+
 
     def load_data(self):
         game_folder = path.dirname(__file__)
