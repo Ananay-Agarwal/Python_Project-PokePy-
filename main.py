@@ -1,9 +1,10 @@
 from sprites import *
 from tilemap import *
 from playsound import playsound
+import winsound
 
 class Game:
-    playsound('background_music.mp3')
+
     def __init__(self):
         pg.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -43,6 +44,7 @@ class Game:
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
+        winsound.PlaySound("themesong.wav", winsound.SND_ASYNC)
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
