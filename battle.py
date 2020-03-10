@@ -89,15 +89,12 @@ class Battle:
         self.scr.blit(text, [x, y])
 
     def load_battle(self):
-        winsound.PlaySound("pokemon-battle.wav", winsound.SND_LOOP + winsound.SND_ASYNC)
+        winsound.PlaySound('Music Files\Battle! (Wild Pokémon).wav', winsound.SND_LOOP + winsound.SND_ASYNC)
         self.opponent_health = 0
         self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
                                          (self.opp_poke_name,)).fetchall()
         for health in self.opp_health:
             self.opponent_health = int(health[0])
-
-        self.player_health = 274  # Needs to be changed
-        self.max_player_health = self.player_health  # fetch
         self.max_opponent_health = self.opponent_health  # fetch
         self.opp_poke_name = random.choice(self.pokemon_list)
         game_folder = path.dirname(__file__)
@@ -146,12 +143,7 @@ class Battle:
         self.print_text("A wild Pokemon has appeared!", 30, 520, WHITE)
         display.update()
         time.delay(2000)
-        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("1. FIGHT", 600, 550, WHITE)
-        self.print_text("2. BAG", 850, 550, WHITE)
-        self.print_text("3. POKEMON", 600, 650, WHITE)
-        self.print_text("4. RUN", 850, 650, WHITE)
-        display.update()
+        self.display_dialog_box()
         self.battle_run()
 
     def battle_run(self):
@@ -201,7 +193,9 @@ class Battle:
                                 self.print_text("You couldn't escape!", 50, 520, WHITE)
                                 display.update()
                                 time.delay(2000)
-                                self.display_attacks(x)
+                                self.opponent_attack()
+                                time.delay(1000)
+                                self.display_dialog_box()
                     else:
                         if event.key == pygame.K_1:
                             self.player_attack(x, 0)
@@ -209,30 +203,30 @@ class Battle:
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
-                                self.display_attacks(x)
+                                self.display_dialog_box()
                         elif event.key == pygame.K_2:
                             self.player_attack(x, 1)
                             time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
-                                self.display_attacks(x)
+                                self.display_dialog_box()
                         elif event.key == pygame.K_3:
                             self.player_attack(x, 2)
                             time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
-                                self.display_attacks(x)
+                                self.display_dialog_box()
                         elif event.key == pygame.K_4:
                             self.player_attack(x, 3)
                             time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
-                                self.display_attacks(x)
+                                self.display_dialog_box()
+                        self.attack_selected = False
                 else:
-                    winsound.PlaySound(None, winsound.SND_ASYNC)
                     self.battle_playing = False
 
     def display_attacks(self, x):
@@ -243,9 +237,18 @@ class Battle:
         self.print_text("4." + x[0][3], 750, 650, WHITE)
         self.attack_selected = True
 
+    def display_dialog_box(self):
+        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.print_text("1. FIGHT", 600, 550, WHITE)
+        self.print_text("2. BAG", 850, 550, WHITE)
+        self.print_text("3. POKEMON", 600, 650, WHITE)
+        self.print_text("4. RUN", 850, 650, WHITE)
+        display.update()
+
     def player_attack(self, x, i):
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("Squirtle used " + x[0][i], 20, 520, WHITE)
+        self.print_text(self.player_poke_name + " used " + x[0][i], 20, 520, WHITE)
+        display.update()
         self.hp_enemy = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
                                                (x[0][i],)).fetchall()
         for hp in self.hp_enemy:
@@ -266,12 +269,12 @@ class Battle:
             display.update()
         else:
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            time.delay(2000)
             self.print_text("You Won!!", 20, 520, WHITE)
             self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
             time.delay(500)
             self.player_win = True
-            winsound.PlaySound(None, winsound.SND_ASYNC)
             self.battle_playing = False
 
     def opponent_attack(self):
@@ -283,6 +286,7 @@ class Battle:
 
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text(self.opp_poke_name + " used " + self.opp_poke_attack, 20, 520, WHITE)
+        display.update()
         print(self.opp_poke_attack)
         self.hp_user = enemy_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
                                                (self.opp_poke_attack,)).fetchall()
@@ -304,12 +308,12 @@ class Battle:
             display.update()
         else:
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            time.delay(2000)
             self.print_text("You Lost!!", 20, 520, WHITE)
             self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
             display.update()
             time.delay(500)
             self.player_win = True
-            winsound.PlaySound(None, winsound.SND_ASYNC)
             self.battle_playing = False
 
     def start_battle(self):

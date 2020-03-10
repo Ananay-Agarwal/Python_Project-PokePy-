@@ -1,7 +1,7 @@
 from sprites import *
 from tilemap import *
-from playsound import playsound
 import winsound
+
 
 class Game:
 
@@ -17,7 +17,6 @@ class Game:
         self.draw_debug = False
         self.battle_encounter = False
 
-
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
@@ -29,6 +28,7 @@ class Game:
 
     def new(self):
         # initialize all variables and do all the setup for a new game
+        winsound.PlaySound('Music Files\Road to Viridian City.wav', winsound.SND_LOOP + winsound.SND_ASYNC)
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
@@ -44,7 +44,6 @@ class Game:
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
-        winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_LOOP + winsound.SND_ASYNC)
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
@@ -66,11 +65,11 @@ class Game:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(wall.rect), 1)
             pg.draw.rect(self.screen, RED, self.camera.apply_rect(self.player.rect), 1)
         if self.battle_encounter:
-            winsound.PlaySound(None, winsound.SND_ASYNC)
             self.battle.start_battle()
+            winsound.PlaySound(None, winsound.SND_ASYNC)
             self.new()
             self.battle_encounter = False
-            winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_LOOP + winsound.SND_ASYNC)
+
         pg.display.flip()
 
     def quit(self):
