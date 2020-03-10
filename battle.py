@@ -303,7 +303,8 @@ class Battle:
             self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
             display.update()
             time.delay(500)
-            pygame.quit()
+            self.player_win = True
+            self.battle_playing = False
 
     def start_battle(self):
         self.battle_playing = True
@@ -311,8 +312,8 @@ class Battle:
         self.load_battle()
 
 
-obj = Battle()
-obj.start_battle()
+#obj = Battle()
+#obj.start_battle()
 #     def check_health(self):
 
 #
