@@ -29,6 +29,7 @@ class Game:
 
     def new(self):
         # initialize all variables and do all the setup for a new game
+        winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_ASYNC)
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
@@ -44,7 +45,6 @@ class Game:
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
-        winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_ASYNC)
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
@@ -69,6 +69,7 @@ class Game:
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound("pokemon-battle.wav", winsound.SND_ASYNC)
             self.battle.start_battle()
+            winsound.PlaySound(None, winsound.SND_ASYNC)
             self.new()
             self.battle_encounter = False
         pg.display.flip()
