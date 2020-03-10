@@ -44,7 +44,7 @@ class Game:
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
-        winsound.PlaySound("themesong.wav", winsound.SND_ASYNC)
+        winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_ASYNC)
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
