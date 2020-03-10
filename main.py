@@ -66,6 +66,8 @@ class Game:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(wall.rect), 1)
             pg.draw.rect(self.screen, RED, self.camera.apply_rect(self.player.rect), 1)
         if self.battle_encounter:
+            winsound.PlaySound(None, winsound.SND_ASYNC)
+            winsound.PlaySound("pokemon-battle.wav", winsound.SND_ASYNC)
             self.battle.start_battle()
             self.new()
             self.battle_encounter = False
