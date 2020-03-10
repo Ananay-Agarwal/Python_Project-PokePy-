@@ -20,16 +20,18 @@ class Battle:
     def __init__(self):
         self.battle_playing = True
         self.attack_selected = False
+        self.player_win = False
 
         self.pokemon_list = ['Bulbasaur', 'Charmander', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
-        self.player_poke_name = 'Pikachu'
+        self.player_poke_name = 'Squirtle'
         self.opp_poke_name = random.choice(self.pokemon_list)
-        self.opponent_health=0
-        self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)', (self.opp_poke_name,)).fetchall()
+        self.opponent_health = 0
+        self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
+                                         (self.opp_poke_name,)).fetchall()
         for health in self.opp_health:
             self.opponent_health = int(health[0])
 
-        self.player_health = 274 #Needs to be changed
+        self.player_health = 274  # Needs to be changed
         self.max_player_health = self.player_health  # fetch
         self.max_opponent_health = self.opponent_health  # fetch
 
@@ -74,7 +76,10 @@ class Battle:
             col = YELLOW
         else:
             col = RED
-        width = int(w * health / max_health)
+        if health >= 0:
+            width = int(w * health / max_health)
+        else:
+            width = 0
         health_bar = Rect(x, y, width, h)
         draw.rect(self.scr, col, health_bar)
 
@@ -83,6 +88,15 @@ class Battle:
         self.scr.blit(text, [x, y])
 
     def load_battle(self):
+        self.opponent_health = 0
+        self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
+                                         (self.opp_poke_name,)).fetchall()
+        for health in self.opp_health:
+            self.opponent_health = int(health[0])
+
+        self.player_health = 274  # Needs to be changed
+        self.max_player_health = self.player_health  # fetch
+        self.max_opponent_health = self.opponent_health  # fetch
         self.opp_poke_name = random.choice(self.pokemon_list)
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
@@ -127,15 +141,16 @@ class Battle:
 
         # loading main dialog box
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("A wild Pokemon has appeared!! what do you want to do?", 20, 500, WHITE)
-        self.print_text("1. Attack", 20, 550, WHITE)
-        self.print_text("2. Flee", 180, 550, WHITE)
-        self.print_text("3. Inventory", 20, 590, WHITE)
-        self.print_text("4. Shop", 200, 590, WHITE)
+        self.print_text("A wild Pokemon has appeared!", 30, 520, WHITE)
+        display.update()
+        time.delay(2000)
+        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.print_text("1. FIGHT", 600, 550, WHITE)
+        self.print_text("2. BAG", 850, 550, WHITE)
+        self.print_text("3. POKEMON", 600, 650, WHITE)
+        self.print_text("4. RUN", 850, 650, WHITE)
         display.update()
         self.battle_run()
-        # while event.wait().type != QUIT and self.opponent_health != 0 and self.player_health != 0 and pygame.event != pygame.K_ESCAPE:
-        #    pass
 
     def battle_run(self):
         # game loop - set self.playing = False to end the game
@@ -159,7 +174,7 @@ class Battle:
                 if self.opponent_health >= 1 and self.player_health >= 1:
                     x = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
                                             Pokemon where Pokemon_Name=(?)''',
-                                          (self.player_poke_name,)).fetchall()
+                                              (self.player_poke_name,)).fetchall()
 
                     if not self.attack_selected:
                         if event.key == pygame.K_1:
@@ -169,18 +184,20 @@ class Battle:
                             self.print_text("Items opened", 500, 520, WHITE)
                     else:
                         if event.key == pygame.K_1:
-                            self.player_attack(x,0)
+                            self.player_attack(x, 0)
                             time.delay(1000)
                             # self.check_health()
                             # time.delay(1000)
-                            self.opponent_attack()
-                            # time.delay(1000)
-                            # self.check_health()
-                            time.delay(1000)
-                            self.display_attacks(x)
-                        elif event.key == pygame.K_2:
-                                self.player_attack(x, 1)
+                            if not self.player_win:
+                                self.opponent_attack()
+                                # time.delay(1000)
+                                # self.check_health()
                                 time.delay(1000)
+                                self.display_attacks(x)
+                        elif event.key == pygame.K_2:
+                            self.player_attack(x, 1)
+                            time.delay(1000)
+                            if not self.player_win:
                                 # self.check_health()
                                 # time.delay(1000)
                                 self.opponent_attack()
@@ -189,8 +206,9 @@ class Battle:
                                 time.delay(1000)
                                 self.display_attacks(x)
                         elif event.key == pygame.K_3:
-                                self.player_attack(x, 2)
-                                time.delay(1000)
+                            self.player_attack(x, 2)
+                            time.delay(1000)
+                            if not self.player_win:
                                 # self.check_health()
                                 # time.delay(1000)
                                 self.opponent_attack()
@@ -199,26 +217,28 @@ class Battle:
                                 time.delay(1000)
                                 self.display_attacks(x)
                         elif event.key == pygame.K_4:
-                                self.player_attack(x, 3)
-                                time.delay(1000)
-                                #self.check_health()
-                                #time.delay(1000)
+                            self.player_attack(x, 3)
+                            time.delay(1000)
+                            if not self.player_win:
+                                # self.check_health()
+                                # time.delay(1000)
                                 self.opponent_attack()
-                                #time.delay(1000)
-                                #self.check_health()
+                                # time.delay(1000)
+                                # self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
+                else:
+                    self.battle_playing = False
 
-    def display_attacks(self,x):
+    def display_attacks(self, x):
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("1." + x[0][0], 630, 520, WHITE)
-        self.print_text("2." + x[0][1], 850, 520, WHITE)
-        self.print_text("3." + x[0][2], 630, 620, WHITE)
-        self.print_text("4." + x[0][3], 830, 620, WHITE)
+        self.print_text("1." + x[0][0], 500, 550, WHITE)
+        self.print_text("2." + x[0][1], 750, 550, WHITE)
+        self.print_text("3." + x[0][2], 500, 650, WHITE)
+        self.print_text("4." + x[0][3], 750, 650, WHITE)
         self.attack_selected = True
 
-
-    def player_attack(self,x,i):
+    def player_attack(self, x, i):
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text("Pikachu used " + x[0][i], 20, 520, WHITE)
         self.hp_enemy = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
@@ -236,7 +256,7 @@ class Battle:
         # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-        if self.opponent_health>=1:
+        if self.opponent_health >= 1:
             self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
         else:
@@ -245,7 +265,8 @@ class Battle:
             self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
             time.delay(500)
-            pygame.quit()
+            self.player_win = True
+            self.battle_playing = False
 
     def opponent_attack(self):
         y = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
@@ -255,10 +276,10 @@ class Battle:
         self.opp_poke_attack = random.choice(self.opponent_attacks_list)
 
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text(self.opp_poke_name+" used " + self.opp_poke_attack, 20, 520, WHITE)
+        self.print_text(self.opp_poke_name + " used " + self.opp_poke_attack, 20, 520, WHITE)
         print(self.opp_poke_attack)
         self.hp_user = enemy_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
-                                         (self.opp_poke_attack,)).fetchall()
+                                               (self.opp_poke_attack,)).fetchall()
         for hp in self.hp_user:
             self.hp_to_reduce_player = int(hp[0])
 
@@ -272,7 +293,7 @@ class Battle:
         # player health bar
         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-        if self.player_health>=1:
+        if self.player_health >= 1:
             self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
             display.update()
         else:
@@ -282,49 +303,50 @@ class Battle:
             display.update()
             time.delay(500)
             pygame.quit()
+
     def start_battle(self):
         self.battle_playing = True
+        self.player_win = False
         self.load_battle()
 
 
 #obj = Battle()
 #obj.start_battle()
- #     def check_health(self):
+#     def check_health(self):
 
-    #
-    #     if self.opponent_health <= 0:
-    #
-    #         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-    #
-    #         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-    #         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-    #         self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
-    #
-    #         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
-    #         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-    #         self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-    #
-    #         self.print_text("You Won!!", 20, 520, WHITE)
-    #         display.update()
-    #         time.delay(1000)
-    #         # pygame.quit()
-    #         sys.exit()
-    #         #Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
-    #     elif self.player_health <= 0:
-    #
-    #         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-    #
-    #         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
-    #         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-    #         self.draw_health_bar(1, self.max_player_health, 700, 410, 250, 10)
-    #
-    #         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-    #         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-    #         self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
-    #
-    #         self.print_text("Stupid!! You Lost", 20, 520, WHITE)
-    #         display.update()
-    #         time.delay(1000)
-    #         #pygame.quit()
-    #         # Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
-
+#
+#     if self.opponent_health <= 0:
+#
+#         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+#
+#         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
+#         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
+#         self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
+#
+#         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
+#         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
+#         self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+#
+#         self.print_text("You Won!!", 20, 520, WHITE)
+#         display.update()
+#         time.delay(1000)
+#         # pygame.quit()
+#         sys.exit()
+#         #Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
+#     elif self.player_health <= 0:
+#
+#         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+#
+#         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
+#         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
+#         self.draw_health_bar(1, self.max_player_health, 700, 410, 250, 10)
+#
+#         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
+#         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
+#         self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
+#
+#         self.print_text("Stupid!! You Lost", 20, 520, WHITE)
+#         display.update()
+#         time.delay(1000)
+#         #pygame.quit()
+#         # Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
