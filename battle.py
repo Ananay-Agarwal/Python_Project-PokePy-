@@ -38,6 +38,7 @@ class Battle:
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
 
+
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
         AAfilledRoundedRect(surface,rect,color,radius=0.4)
@@ -303,7 +304,8 @@ class Battle:
             self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
             display.update()
             time.delay(500)
-            pygame.quit()
+            self.player_win = True
+            self.battle_playing = False
 
     def start_battle(self):
         self.battle_playing = True
