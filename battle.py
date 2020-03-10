@@ -4,6 +4,7 @@ from os import path
 import random
 import pygame
 import sqlite3
+import winsound
 import sys
 
 conn = sqlite3.connect('PokePy.db')
@@ -37,7 +38,6 @@ class Battle:
 
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
-
 
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
@@ -89,6 +89,7 @@ class Battle:
         self.scr.blit(text, [x, y])
 
     def load_battle(self):
+        winsound.PlaySound("pokemon-battle.wav", winsound.SND_LOOP + winsound.SND_ASYNC)
         self.opponent_health = 0
         self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
                                          (self.opp_poke_name,)).fetchall()
@@ -161,6 +162,7 @@ class Battle:
             # self.draw()
 
     def quit_battle(self):
+        winsound.PlaySound(None, winsound.SND_ASYNC)
         self.battle_playing = False
 
     def battle_update(self):
@@ -194,6 +196,7 @@ class Battle:
                                 self.print_text("Coward!! You decided to flee", 50, 520, WHITE)
                                 display.update()
                                 time.delay(2000)
+                                winsound.PlaySound(None, winsound.SND_ASYNC)
                                 self.battle_playing=False
                             else:
                                 self.print_text("Man up buddy!! You cannot flee",50,520,WHITE)
@@ -230,6 +233,7 @@ class Battle:
                                 time.delay(1000)
                                 self.display_attacks(x)
                 else:
+                    winsound.PlaySound(None, winsound.SND_ASYNC)
                     self.battle_playing = False
 
     def display_attacks(self, x):
@@ -268,6 +272,7 @@ class Battle:
             display.update()
             time.delay(500)
             self.player_win = True
+            winsound.PlaySound(None, winsound.SND_ASYNC)
             self.battle_playing = False
 
     def opponent_attack(self):
@@ -305,6 +310,7 @@ class Battle:
             display.update()
             time.delay(500)
             self.player_win = True
+            winsound.PlaySound(None, winsound.SND_ASYNC)
             self.battle_playing = False
 
     def start_battle(self):

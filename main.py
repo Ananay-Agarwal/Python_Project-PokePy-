@@ -44,7 +44,7 @@ class Game:
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
-        winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_ASYNC)
+        winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_LOOP + winsound.SND_ASYNC)
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
@@ -67,10 +67,10 @@ class Game:
             pg.draw.rect(self.screen, RED, self.camera.apply_rect(self.player.rect), 1)
         if self.battle_encounter:
             winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound("pokemon-battle.wav", winsound.SND_ASYNC)
             self.battle.start_battle()
             self.new()
             self.battle_encounter = False
+            winsound.PlaySound("Yoshikage_Kira_Theme.wav", winsound.SND_LOOP + winsound.SND_ASYNC)
         pg.display.flip()
 
     def quit(self):
