@@ -179,52 +179,53 @@ class Battle:
                     if not self.attack_selected:
                         if event.key == pygame.K_1:
                             self.display_attacks(x)
-                        if event.key == pygame.K_2:
+                        elif event.key == pygame.K_2:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.print_text("Items opened", 500, 520, WHITE)
+                            self.print_text("Bag Opened", 500, 520, WHITE)
+                        elif event.key == pygame.K_3:
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("Pokemon List", 500, 520, WHITE)
+                        elif event.key == pygame.K_4:
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.flee_counter = random.randrange(1,9)
+                            print(self.flee_counter)
+                            if(self.flee_counter<=5):
+                                self.print_text("Coward!! You decided to flee", 50, 520, WHITE)
+                                display.update()
+                                time.delay(2000)
+                                self.battle_playing=False
+                            else:
+                                self.print_text("Man up buddy!! You cannot flee",50,520,WHITE)
+                                display.update()
+                                time.delay(2000)
+                                self.display_attacks(x)
                     else:
                         if event.key == pygame.K_1:
                             self.player_attack(x, 0)
                             time.delay(1000)
-                            # self.check_health()
-                            # time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
-                                # time.delay(1000)
-                                # self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
                         elif event.key == pygame.K_2:
                             self.player_attack(x, 1)
                             time.delay(1000)
                             if not self.player_win:
-                                # self.check_health()
-                                # time.delay(1000)
                                 self.opponent_attack()
-                                # time.delay(1000)
-                                # self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
                         elif event.key == pygame.K_3:
                             self.player_attack(x, 2)
                             time.delay(1000)
                             if not self.player_win:
-                                # self.check_health()
-                                # time.delay(1000)
                                 self.opponent_attack()
-                                # time.delay(1000)
-                                # self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
                         elif event.key == pygame.K_4:
                             self.player_attack(x, 3)
                             time.delay(1000)
                             if not self.player_win:
-                                # self.check_health()
-                                # time.delay(1000)
                                 self.opponent_attack()
-                                # time.delay(1000)
-                                # self.check_health()
                                 time.delay(1000)
                                 self.display_attacks(x)
                 else:
@@ -240,7 +241,7 @@ class Battle:
 
     def player_attack(self, x, i):
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("Pikachu used " + x[0][i], 20, 520, WHITE)
+        self.print_text("Squirtle used " + x[0][i], 20, 520, WHITE)
         self.hp_enemy = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
                                                (x[0][i],)).fetchall()
         for hp in self.hp_enemy:
@@ -310,8 +311,8 @@ class Battle:
         self.load_battle()
 
 
-#obj = Battle()
-#obj.start_battle()
+obj = Battle()
+obj.start_battle()
 #     def check_health(self):
 
 #
