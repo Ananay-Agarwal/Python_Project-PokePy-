@@ -38,7 +38,6 @@ class Battle:
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
 
-
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
         AAfilledRoundedRect(surface,rect,color,radius=0.4)
@@ -182,21 +181,21 @@ class Battle:
                             self.display_attacks(x)
                         elif event.key == pygame.K_2:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.print_text("Bag Opened", 500, 520, WHITE)
+                            self.print_text("Bag Opened", 30, 520, WHITE)
                         elif event.key == pygame.K_3:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.print_text("Pokemon List", 500, 520, WHITE)
+                            self.print_text("Pokemon List", 30, 520, WHITE)
                         elif event.key == pygame.K_4:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.flee_counter = random.randrange(1,9)
+                            self.flee_counter = random.randrange(1, 9)
                             print(self.flee_counter)
-                            if(self.flee_counter<=5):
-                                self.print_text("Coward!! You decided to flee", 50, 520, WHITE)
+                            if self.flee_counter <= 5:
+                                self.print_text("You successfully run away!", 50, 520, WHITE)
                                 display.update()
                                 time.delay(2000)
-                                self.battle_playing=False
+                                self.battle_playing = False
                             else:
-                                self.print_text("Man up buddy!! You cannot flee",50,520,WHITE)
+                                self.print_text("You couldn't escape!", 50, 520, WHITE)
                                 display.update()
                                 time.delay(2000)
                                 self.display_attacks(x)
@@ -312,9 +311,8 @@ class Battle:
         self.player_win = False
         self.load_battle()
 
-
-#obj = Battle()
-#obj.start_battle()
+# obj = Battle()
+# obj.start_battle()
 #     def check_health(self):
 
 #
