@@ -311,8 +311,8 @@ class Battle:
         self.load_battle()
 
 
-obj = Battle()
-obj.start_battle()
+#obj = Battle()
+#obj.start_battle()
 #     def check_health(self):
 
 #
