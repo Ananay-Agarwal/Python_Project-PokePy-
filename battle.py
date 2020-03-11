@@ -277,10 +277,12 @@ class Battle:
         else:
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
             time.delay(2000)
+            # self.bg_music['Battle_Music'].stop()
+            self.sound_effects['Victory'].play()
             self.print_text("You Won!!", 20, 520, WHITE)
             self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
-            time.delay(500)
+            time.delay(5000)
             self.player_win = True
             self.battle_playing = False
 
@@ -331,41 +333,3 @@ class Battle:
 
 # obj = Battle()
 # obj.start_battle()
-#     def check_health(self):
-
-#
-#     if self.opponent_health <= 0:
-#
-#         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-#
-#         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-#         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-#         self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
-#
-#         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
-#         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-#         self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-#
-#         self.print_text("You Won!!", 20, 520, WHITE)
-#         display.update()
-#         time.delay(1000)
-#         # pygame.quit()
-#         sys.exit()
-#         #Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
-#     elif self.player_health <= 0:
-#
-#         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-#
-#         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
-#         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
-#         self.draw_health_bar(1, self.max_player_health, 700, 410, 250, 10)
-#
-#         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
-#         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
-#         self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
-#
-#         self.print_text("Stupid!! You Lost", 20, 520, WHITE)
-#         display.update()
-#         time.delay(1000)
-#         #pygame.quit()
-#         # Dont uncomment it now the though the window wont close but if you uncomment it , it will end the whole game and give a error
