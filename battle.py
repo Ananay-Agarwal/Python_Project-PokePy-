@@ -4,7 +4,6 @@ from os import path
 import random
 import pygame
 import sqlite3
-import winsound
 import sys
 
 conn = sqlite3.connect('PokePy.db')
@@ -38,6 +37,8 @@ class Battle:
 
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
+
+
 
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
@@ -89,7 +90,6 @@ class Battle:
         self.scr.blit(text, [x, y])
 
     def load_battle(self):
-        winsound.PlaySound('Music Files\Battle! (Wild Pokémon).wav', winsound.SND_LOOP + winsound.SND_ASYNC)
         self.opponent_health = 0
         self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
                                          (self.opp_poke_name,)).fetchall()
@@ -99,6 +99,12 @@ class Battle:
         self.opp_poke_name = random.choice(self.pokemon_list)
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
+        sound_folder = path.join(game_folder, 'Sound Files')
+
+        self.sound_effects = {}
+        for sound_type in EFFECTS_SOUNDS:
+            self.sound_effects[sound_type] = pygame.mixer.Sound(path.join(sound_folder, EFFECTS_SOUNDS[sound_type]))
+            self.sound_effects[sound_type].set_volume(1)
 
         bg_img = image.load(path.join(poke_folder, 'battle_background.png'))
         bg_img2 = image.load(path.join(poke_folder, 'dialogbox_background.png'))
@@ -154,8 +160,8 @@ class Battle:
             # self.draw()
 
     def quit_battle(self):
-        winsound.PlaySound(None, winsound.SND_ASYNC)
-        self.battle_playing = False
+        pygame.quit()
+        sys.exit()
 
     def battle_update(self):
         display.update()
@@ -246,6 +252,7 @@ class Battle:
         display.update()
 
     def player_attack(self, x, i):
+        self.sound_effects['HIT_SFX_01'].play()
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text(self.player_poke_name + " used " + x[0][i], 20, 520, WHITE)
         display.update()
@@ -278,6 +285,7 @@ class Battle:
             self.battle_playing = False
 
     def opponent_attack(self):
+        self.sound_effects['HIT_SFX_01'].play()
         y = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
                                                     Pokemon where Pokemon_Name=(?)''',
                                   (self.opp_poke_name,)).fetchall()

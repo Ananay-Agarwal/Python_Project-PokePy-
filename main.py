@@ -25,10 +25,18 @@ class Game:
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
         self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
+        # Loading Sounds
+        sound_folder = path.join(game_folder, 'Sound Files')
+        self.bg_music = {}
+        for sound_type in BG_MUSIC:
+            self.bg_music[sound_type] = pg.mixer.Sound(path.join(sound_folder, BG_MUSIC[sound_type]))
+            self.bg_music[sound_type].set_volume(0.5)
+        self.sound_effects = {}
+        for sound_type in EFFECTS_SOUNDS:
+            self.sound_effects[sound_type] = pg.mixer.Sound(path.join(sound_folder, EFFECTS_SOUNDS[sound_type]))
 
     def new(self):
         # initialize all variables and do all the setup for a new game
-        winsound.PlaySound('Music Files\Road to Viridian City.wav', winsound.SND_LOOP + winsound.SND_ASYNC)
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
@@ -44,6 +52,7 @@ class Game:
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
+        self.bg_music['Map_Music'].play(-1)
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
@@ -65,8 +74,11 @@ class Game:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(wall.rect), 1)
             pg.draw.rect(self.screen, RED, self.camera.apply_rect(self.player.rect), 1)
         if self.battle_encounter:
+            self.bg_music['Map_Music'].stop()
+            self.bg_music['Battle_Music'].play(-1)
             self.battle.start_battle()
-            winsound.PlaySound(None, winsound.SND_ASYNC)
+            self.bg_music['Battle_Music'].stop()
+            self.bg_music['Map_Music'].play(-1)
             self.new()
             self.battle_encounter = False
 

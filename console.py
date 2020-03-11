@@ -19,6 +19,11 @@ TILESIZE = 16
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
+# Sound Settings
+EFFECTS_SOUNDS = {'HIT_SFX_01': 'firered_000D.wav'}
+BG_MUSIC = {'Map_Music': 'Road to Viridian City.wav',
+            'Battle_Music': 'Battle! (Wild Pokémon).wav'}
+
 # Player settings
 PLAYER_SPEED = 300
 GRASS_IMG = 'grass.png'
