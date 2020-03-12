@@ -37,8 +37,17 @@ class Battle:
 
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
+        game_folder = path.dirname(__file__)
+        sound_folder = path.join(game_folder, 'Sound Files')
 
-
+        self.sound_effects = {}
+        for sound_type in EFFECTS_SOUNDS:
+            self.sound_effects[sound_type] = pygame.mixer.Sound(path.join(sound_folder, EFFECTS_SOUNDS[sound_type]))
+            self.sound_effects[sound_type].set_volume(1)
+        self.bg_music = {}
+        for sound_type in BG_MUSIC:
+            self.bg_music[sound_type] = pygame.mixer.Sound(path.join(sound_folder, BG_MUSIC[sound_type]))
+            self.bg_music[sound_type].set_volume(0.5)
 
     def AAfilledRoundedRect(self, surface, rect, color, radius=0.4):
         """
@@ -99,12 +108,7 @@ class Battle:
         self.opp_poke_name = random.choice(self.pokemon_list)
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
-        sound_folder = path.join(game_folder, 'Sound Files')
 
-        self.sound_effects = {}
-        for sound_type in EFFECTS_SOUNDS:
-            self.sound_effects[sound_type] = pygame.mixer.Sound(path.join(sound_folder, EFFECTS_SOUNDS[sound_type]))
-            self.sound_effects[sound_type].set_volume(1)
 
         bg_img = image.load(path.join(poke_folder, 'battle_background.png'))
         bg_img2 = image.load(path.join(poke_folder, 'dialogbox_background.png'))
@@ -275,12 +279,13 @@ class Battle:
             self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
         else:
-            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-            time.delay(2000)
-            # self.bg_music['Battle_Music'].stop()
-            self.sound_effects['Victory'].play()
-            self.print_text("You Won!!", 20, 520, WHITE)
             self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
+            display.update()
+            time.delay(2000)
+            self.bg_music['Battle_Music'].stop()
+            self.sound_effects['Victory'].play()
+            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            self.print_text("You Won!!", 20, 520, WHITE)
             display.update()
             time.delay(5000)
             self.player_win = True
@@ -317,19 +322,26 @@ class Battle:
             self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
             display.update()
         else:
-            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-            time.delay(2000)
-            self.print_text("You Lost!!", 20, 520, WHITE)
             self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
             display.update()
-            time.delay(500)
+            time.delay(2000)
+            self.bg_music['Battle_Music'].stop()
+            self.sound_effects['Lose'].play()
+            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            self.print_text("You Lost!!", 20, 520, WHITE)
+            display.update()
+            time.delay(3000)
             self.player_win = True
             self.battle_playing = False
+            self.player_health = self.max_player_health
 
     def start_battle(self):
+        self.bg_music['Battle_Music'].play(-1)
         self.battle_playing = True
         self.player_win = False
         self.load_battle()
+        if not self.player_win:
+            self.bg_music['Battle_Music'].stop()
 
 # obj = Battle()
 # obj.start_battle()

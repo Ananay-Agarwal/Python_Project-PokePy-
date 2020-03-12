@@ -75,9 +75,7 @@ class Game:
             pg.draw.rect(self.screen, RED, self.camera.apply_rect(self.player.rect), 1)
         if self.battle_encounter:
             self.bg_music['Map_Music'].stop()
-            self.bg_music['Battle_Music'].play(-1)
             self.battle.start_battle()
-            self.bg_music['Battle_Music'].stop()
             self.bg_music['Map_Music'].play(-1)
             self.new()
             self.battle_encounter = False
