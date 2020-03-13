@@ -1,6 +1,5 @@
 from sprites import *
 from tilemap import *
-import winsound
 
 
 class Game:

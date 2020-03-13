@@ -13,8 +13,6 @@ user_hp_cursor = conn.cursor()
 enemy_hp_cursor = conn.cursor()
 pygame.init()
 
-font = pygame.font.SysFont('sans', 32)
-
 
 class Battle:
     def __init__(self):
@@ -23,7 +21,7 @@ class Battle:
         self.player_win = False
 
         self.pokemon_list = ['Bulbasaur', 'Charmander', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
-        self.player_poke_name = 'Squirtle'
+        self.player_poke_name = 'Mewtwo'
         self.opp_poke_name = random.choice(self.pokemon_list)
         self.opponent_health = 0
         self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
@@ -94,9 +92,63 @@ class Battle:
         health_bar = Rect(x, y, width, h)
         draw.rect(self.scr, col, health_bar)
 
-    def print_text(self, msg, x, y, colour):
-        text = font.render(msg, True, colour)
+    def draw_xp_bar(self, xp, max_xp, x, y, w, h):
+        col = LIGHTBLUE
+        width = int(w * xp / max_xp)
+        xp_bar = Rect(x, y, width, h)
+        draw.rect(self.scr, col, xp_bar)
+
+    def print_text(self, msg, x, y, colour, text_size):
+        text_font = pygame.font.SysFont('sans', text_size, True)
+        text = text_font.render(msg, True, colour)
         self.scr.blit(text, [x, y])
+
+    def display_attacks(self, x):
+        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.print_text("1." + x[0][0], 500, 550, WHITE, 32)
+        self.print_text("2." + x[0][1], 750, 550, WHITE, 32)
+        self.print_text("3." + x[0][2], 500, 650, WHITE, 32)
+        self.print_text("4." + x[0][3], 750, 650, WHITE, 32)
+        self.attack_selected = True
+
+    def display_dialog_box(self):
+        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.print_text("1. FIGHT", 600, 550, WHITE, 32)
+        self.print_text("2. BAG", 850, 550, WHITE, 32)
+        self.print_text("3. POKEMON", 600, 650, WHITE, 32)
+        self.print_text("4. RUN", 850, 650, WHITE, 32)
+        display.update()
+
+    def display_pokemon(self):
+        game_folder = path.dirname(__file__)
+        poke_folder = path.join(game_folder, 'Assets\Pokemon')
+        user_poke_icon_1 = image.load(path.join(poke_folder, self.player_poke_name + '_icon.png'))
+        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+
+        # Draw small rectangles, small picture and pokemon name
+        self.AAfilledRoundedRect(self.scr, (40, 540, 200, 40), LIGHTBLUE, 1)
+        self.scr.blit(user_poke_icon_1, (55, 570 - user_poke_icon_1.get_height()))  # pokemon 1
+        self.print_text("1. " + self.player_poke_name, 100, 550, BLACK, 20)
+
+        self.AAfilledRoundedRect(self.scr, (420, 540, 200, 40), LIGHTBLUE, 1)
+        self.scr.blit(user_poke_icon_1, (435, 570 - user_poke_icon_1.get_height()))  # pokemon 2
+        self.print_text("2. " + self.player_poke_name, 480, 550, BLACK, 20)
+
+        self.AAfilledRoundedRect(self.scr, (790, 540, 200, 40), LIGHTBLUE, 1)
+        self.scr.blit(user_poke_icon_1, (805, 570 - user_poke_icon_1.get_height()))  # pokemon 3
+        self.print_text("3. " + self.player_poke_name, 850, 550, BLACK, 20)
+
+        self.AAfilledRoundedRect(self.scr, (40, 640, 200, 40), LIGHTBLUE, 1)
+        self.scr.blit(user_poke_icon_1, (55, 670 - user_poke_icon_1.get_height()))  # pokemon 4
+        self.print_text("4. " + self.player_poke_name, 100, 650, BLACK, 20)
+
+        self.AAfilledRoundedRect(self.scr, (420, 640, 200, 40), LIGHTBLUE, 1)
+        self.scr.blit(user_poke_icon_1, (435, 670 - user_poke_icon_1.get_height()))  # pokemon 5
+        self.print_text("5. " + self.player_poke_name, 480, 650, BLACK, 20)
+
+        self.AAfilledRoundedRect(self.scr, (790, 640, 200, 40), LIGHTBLUE, 1)
+        self.scr.blit(user_poke_icon_1, (805, 670 - user_poke_icon_1.get_height()))  # pokemon 6
+        self.print_text("6. " + self.player_poke_name, 850, 650, BLACK, 20)
 
     def load_battle(self):
         self.opponent_health = 0
@@ -109,12 +161,11 @@ class Battle:
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
 
-
         bg_img = image.load(path.join(poke_folder, 'battle_background.png'))
         bg_img2 = image.load(path.join(poke_folder, 'dialogbox_background.png'))
 
-        user_poke = image.load(path.join(poke_folder, self.player_poke_name + '_back.png'))
-        opp_poke = image.load(path.join(poke_folder, self.opp_poke_name + '_front.png'))
+        user_poke_img = image.load(path.join(poke_folder, self.player_poke_name + '_back.png'))
+        opp_poke_img = image.load(path.join(poke_folder, self.opp_poke_name + '_front.png'))
 
         self.scr.blit(bg_img, (0, 0))  # loading background
         for i in range(0, 871, 290):  # loading lower background
@@ -130,8 +181,8 @@ class Battle:
         self.AAfilledRoundedRect(self.scr, (540, 350, 450, 100), WHITE, 0.5)
 
         # printing details
-        self.print_text(self.player_poke_name, 570, 360, BLACK)
-        self.print_text(self.opp_poke_name, 60, 40, BLACK)
+        self.print_text(self.player_poke_name, 570, 360, BLACK, 32)
+        self.print_text(self.opp_poke_name, 60, 40, BLACK, 32)
 
         # drawing health bars
         # opponent health bar
@@ -145,12 +196,12 @@ class Battle:
         self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
 
         # loading pokemon sprites
-        self.scr.blit(user_poke, (150, 478 - user_poke.get_height()))
-        self.scr.blit(opp_poke, (700, 270 - opp_poke.get_height()))
+        self.scr.blit(user_poke_img, (150, 478 - user_poke_img.get_height()))
+        self.scr.blit(opp_poke_img, (700, 270 - opp_poke_img.get_height()))
 
         # loading main dialog box
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("A wild Pokemon has appeared!", 30, 520, WHITE)
+        self.print_text("A wild Pokemon has appeared!", 30, 520, WHITE, 32)
         display.update()
         time.delay(2000)
         self.display_dialog_box()
@@ -186,21 +237,22 @@ class Battle:
                             self.display_attacks(x)
                         elif event.key == pygame.K_2:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.print_text("Bag Opened", 30, 520, WHITE)
+                            self.print_text("Bag Opened", 30, 520, WHITE, 32)
                         elif event.key == pygame.K_3:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.print_text("Pokemon List", 30, 520, WHITE)
+                            self.print_text("Pokemon List", 30, 520, WHITE, 32)
+                            self.display_pokemon()
                         elif event.key == pygame.K_4:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                             self.flee_counter = random.randrange(1, 9)
                             print(self.flee_counter)
                             if self.flee_counter <= 5:
-                                self.print_text("You successfully run away!", 50, 520, WHITE)
+                                self.print_text("You successfully run away!", 50, 520, WHITE, 32)
                                 display.update()
                                 time.delay(2000)
                                 self.battle_playing = False
                             else:
-                                self.print_text("You couldn't escape!", 50, 520, WHITE)
+                                self.print_text("You couldn't escape!", 50, 520, WHITE, 32)
                                 display.update()
                                 time.delay(2000)
                                 self.opponent_attack()
@@ -239,26 +291,10 @@ class Battle:
                 else:
                     self.battle_playing = False
 
-    def display_attacks(self, x):
-        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("1." + x[0][0], 500, 550, WHITE)
-        self.print_text("2." + x[0][1], 750, 550, WHITE)
-        self.print_text("3." + x[0][2], 500, 650, WHITE)
-        self.print_text("4." + x[0][3], 750, 650, WHITE)
-        self.attack_selected = True
-
-    def display_dialog_box(self):
-        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("1. FIGHT", 600, 550, WHITE)
-        self.print_text("2. BAG", 850, 550, WHITE)
-        self.print_text("3. POKEMON", 600, 650, WHITE)
-        self.print_text("4. RUN", 850, 650, WHITE)
-        display.update()
-
     def player_attack(self, x, i):
         self.sound_effects['HIT_SFX_01'].play()
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text(self.player_poke_name + " used " + x[0][i], 20, 520, WHITE)
+        self.print_text(self.player_poke_name + " used " + x[0][i], 20, 520, WHITE, 32)
         display.update()
         self.hp_enemy = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
                                                (x[0][i],)).fetchall()
@@ -282,10 +318,10 @@ class Battle:
             self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
             time.delay(2000)
-            self.bg_music['Battle_Music'].stop()
+            self.bg_music['Final Battle'].stop()
             self.sound_effects['Victory'].play()
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-            self.print_text("You Won!!", 20, 520, WHITE)
+            self.print_text("You Won!!", 20, 520, WHITE, 32)
             display.update()
             time.delay(5000)
             self.player_win = True
@@ -300,7 +336,7 @@ class Battle:
         self.opp_poke_attack = random.choice(self.opponent_attacks_list)
 
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text(self.opp_poke_name + " used " + self.opp_poke_attack, 20, 520, WHITE)
+        self.print_text(self.opp_poke_name + " used " + self.opp_poke_attack, 20, 520, WHITE, 32)
         display.update()
         print(self.opp_poke_attack)
         self.hp_user = enemy_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
@@ -325,10 +361,10 @@ class Battle:
             self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
             display.update()
             time.delay(2000)
-            self.bg_music['Battle_Music'].stop()
+            self.bg_music['Final Battle'].stop()
             self.sound_effects['Lose'].play()
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-            self.print_text("You Lost!!", 20, 520, WHITE)
+            self.print_text("You Lost!!", 20, 520, WHITE, 32)
             display.update()
             time.delay(3000)
             self.player_win = True
@@ -336,12 +372,13 @@ class Battle:
             self.player_health = self.max_player_health
 
     def start_battle(self):
-        self.bg_music['Battle_Music'].play(-1)
+        self.bg_music['Final Battle'].play(-1)
         self.battle_playing = True
         self.player_win = False
         self.load_battle()
         if not self.player_win:
-            self.bg_music['Battle_Music'].stop()
+            self.bg_music['Final Battle'].stop()
+
 
 # obj = Battle()
 # obj.start_battle()

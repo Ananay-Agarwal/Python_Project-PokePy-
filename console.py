@@ -7,6 +7,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 BLUE = (75, 75, 225)
+LIGHTBLUE = (150, 150, 225)
 
 # game settings
 WIDTH = 1024
@@ -24,7 +25,9 @@ EFFECTS_SOUNDS = {'HIT_SFX_01': 'firered_000D.wav',
                   'Victory': 'Victory! (Wild Pokémon).wav.',
                   'Lose': 'Too bad.wav'}
 BG_MUSIC = {'Map_Music': 'Road to Viridian City.wav',
-            'Battle_Music': 'Battle! (Wild Pokémon).wav'}
+            'Battle_Music': 'Battle! (Wild Pokémon).wav',
+            'Ascension': 'Ascension.wav',
+            'Final Battle': 'Final Battle.wav'}
 
 # Player settings
 PLAYER_SPEED = 300
