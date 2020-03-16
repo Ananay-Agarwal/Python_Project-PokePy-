@@ -18,10 +18,13 @@ class Battle:
     def __init__(self):
         self.battle_playing = True
         self.attack_selected = False
+        self.bag_selected = False
+        self.pokemon_selected = False
         self.player_win = False
 
         self.pokemon_list = ['Bulbasaur', 'Charmander', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
-        self.player_poke_name = 'Mewtwo'
+        self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_poke_name = self.player_poke_name[0][0]
         self.opp_poke_name = random.choice(self.pokemon_list)
         self.opponent_health = 0
         self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
@@ -99,24 +102,37 @@ class Battle:
         draw.rect(self.scr, col, xp_bar)
 
     def print_text(self, msg, x, y, colour, text_size):
-        text_font = pygame.font.SysFont('sans', text_size, True)
+        text_font = pygame.font.SysFont('sans', text_size)
         text = text_font.render(msg, True, colour)
         self.scr.blit(text, [x, y])
 
-    def display_attacks(self, x):
-        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-        self.print_text("1." + x[0][0], 500, 550, WHITE, 32)
-        self.print_text("2." + x[0][1], 750, 550, WHITE, 32)
-        self.print_text("3." + x[0][2], 500, 650, WHITE, 32)
-        self.print_text("4." + x[0][3], 750, 650, WHITE, 32)
-        self.attack_selected = True
-
     def display_dialog_box(self):
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.AAfilledRoundedRect(self.scr, (550, 500, 450, 240), BLACK, 0.3)
+        self.AAfilledRoundedRect(self.scr, (560, 510, 430, 220), LIGHTBLUE, 0.3)
+        self.print_text("Choose your action", 30, 500, WHITE, 40)
         self.print_text("1. FIGHT", 600, 550, WHITE, 32)
         self.print_text("2. BAG", 850, 550, WHITE, 32)
         self.print_text("3. POKEMON", 600, 650, WHITE, 32)
         self.print_text("4. RUN", 850, 650, WHITE, 32)
+        display.update()
+
+    def display_attacks(self, attacks):
+        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.AAfilledRoundedRect(self.scr, (480, 500, 520, 240), BLACK, 0.3)
+        self.AAfilledRoundedRect(self.scr, (490, 510, 500, 220), LIGHTBLUE, 0.3)
+        self.print_text("Choose your attack", 30, 500, WHITE, 40)
+        self.print_text("1." + attacks[0][0], 500, 550, WHITE, 32)
+        self.print_text("2." + attacks[0][1], 750, 550, WHITE, 32)
+        self.print_text("3." + attacks[0][2], 500, 650, WHITE, 32)
+        self.print_text("4." + attacks[0][3], 750, 650, WHITE, 32)
+
+    def display_bag(self):
+        self.print_text("1. Potion", 100, 550, BLACK, 20)
+        self.print_text("2. Super Potion", 480, 550, BLACK, 20)
+        self.print_text("3. Hyper Potion", 850, 550, BLACK, 20)
+        self.print_text("4. Pokeball", 100, 650, BLACK, 20)
+        self.print_text("5. Greatball", 480, 650, BLACK, 20)
         display.update()
 
     def display_pokemon(self):
@@ -228,20 +244,24 @@ class Battle:
                 self.quit_battle()
             elif event.type == pygame.KEYDOWN:
                 if self.opponent_health >= 1 and self.player_health >= 1:
-                    x = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
+                    attacks = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
                                             Pokemon where Pokemon_Name=(?)''',
                                               (self.player_poke_name,)).fetchall()
-
-                    if not self.attack_selected:
+                    print(attacks)
+                    # dialog box events
+                    if not self.attack_selected and not self.bag_selected and not self.pokemon_selected:
                         if event.key == pygame.K_1:
-                            self.display_attacks(x)
+                            self.display_attacks(attacks)
+                            self.attack_selected = True
                         elif event.key == pygame.K_2:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.print_text("Bag Opened", 30, 520, WHITE, 32)
+                            self.display_bag()
+                            self.bag_selected = True
                         elif event.key == pygame.K_3:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                             self.print_text("Pokemon List", 30, 520, WHITE, 32)
                             self.display_pokemon()
+                            self.pokemon_selected = True
                         elif event.key == pygame.K_4:
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                             self.flee_counter = random.randrange(1, 9)
@@ -258,36 +278,59 @@ class Battle:
                                 self.opponent_attack()
                                 time.delay(1000)
                                 self.display_dialog_box()
-                    else:
+                    # attack events
+                    elif self.attack_selected:
+                        if event.key == pygame.K_ESCAPE:
+                            self.attack_selected = False
+                            self.display_dialog_box()
+                            break
                         if event.key == pygame.K_1:
-                            self.player_attack(x, 0)
+                            self.player_attack(attacks, 0)
                             time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
                                 self.display_dialog_box()
                         elif event.key == pygame.K_2:
-                            self.player_attack(x, 1)
+                            self.player_attack(attacks, 1)
                             time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
                                 self.display_dialog_box()
                         elif event.key == pygame.K_3:
-                            self.player_attack(x, 2)
+                            self.player_attack(attacks, 2)
                             time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
                                 self.display_dialog_box()
                         elif event.key == pygame.K_4:
-                            self.player_attack(x, 3)
+                            self.player_attack(attacks, 3)
                             time.delay(1000)
                             if not self.player_win:
                                 self.opponent_attack()
                                 time.delay(1000)
                                 self.display_dialog_box()
                         self.attack_selected = False
+                    # bag events
+                    elif self.bag_selected:
+                        if event.key == pygame.K_ESCAPE:
+                            self.bag_selected = False
+                            self.display_dialog_box()
+                            break
+                    # pokemon events
+                    elif self.pokemon_selected:
+                        if event.key == pygame.K_ESCAPE:
+                            self.pokemon_selected = False
+                            self.display_dialog_box()
+                            break
+                        # if event.key == pygame.K_1: # change to pokemon 1
+                        # elif event.key == pygame.K_2: # change to pokemon 2
+                        # elif event.key == pygame.K_3: # change to pokemon 3
+                        # elif event.key == pygame.K_4: # change to pokemon 4
+                        # elif event.key == pygame.K_5: # change to pokemon 5
+                        # elif event.key == pygame.K_6: # change to pokemon 6
                 else:
                     self.battle_playing = False
 
@@ -380,5 +423,5 @@ class Battle:
             self.bg_music['Final Battle'].stop()
 
 
-# obj = Battle()
-# obj.start_battle()
+obj = Battle()
+obj.start_battle()
