@@ -23,29 +23,26 @@ class Battle:
         self.player_win = False
 
         self.pokemon_list = ['Bulbasaur', 'Charmander', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
-        self.player_poke = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand>0''').fetchall()
+        self.player_pokemons = cursor.execute(
+            '''SELECT Pokemon_Name, Level, XP FROM User_Pokemon WHERE On_Hand>0''').fetchall()
+
         self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=1''').fetchall()
         self.player_poke_name = self.player_poke_name[0][0]
-
-        self.opp_poke_name = random.choice(self.pokemon_list)
-        print(self.opp_poke_name)
-        self.opponent_health = 0
-        self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
-                                         (self.opp_poke_name,)).fetchall()
-        for health in self.opp_health:
-            self.opponent_health = int(health[0])
-        y = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
-                                                            Pokemon where Pokemon_Name=(?)''',
-                                  (self.opp_poke_name,)).fetchall()
-        self.opponent_attacks_list = list(y[0])
-        print(self.opponent_attacks_list)
-
-        self.player_health = 274  # Needs to be changed
-        self.max_player_health = self.player_health  # fetch
-        self.max_opponent_health = self.opponent_health  # fetch
+        self.max_player_health = cursor.execute('''SELECT HP FROM Pokemon WHERE Pokemon_Name=(?)''',
+                                                (self.player_poke_name,)).fetchall()
+        self.max_player_health = self.max_player_health[0][0]
+        self.player_health = self.max_player_health
+        self.player_poke_level = cursor.execute('''SELECT Level FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_poke_level = self.player_poke_level[0][0]
+        self.player_poke_xp = cursor.execute('''SELECT XP FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_poke_xp = self.player_poke_xp[0][0]
+        self.player_poke_max_xp = cursor.execute('''SELECT XP FROM Level_Chart WHERE Level=(?)''',
+                                                 (self.player_poke_level,)).fetchall()
+        self.player_poke_max_xp = self.player_poke_max_xp[0][0]
 
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
+
         game_folder = path.dirname(__file__)
         sound_folder = path.join(game_folder, 'Sound Files')
 
@@ -182,38 +179,66 @@ class Battle:
         self.print_text("6. " + self.player_poke_name, 850, 650, BLACK, 20)
 
     def catch_pokemon(self, ball):
-        chance = (((3*self.max_opponent_health - 2*self.opponent_health)*ball)/(6*self.max_opponent_health))*100
+        ball_name = {1: 'Pokeball', 1.5: 'Greatball', 2: 'Ultraball'}
+        chance = (((3 * self.max_opponent_health - 2 * self.opponent_health) * ball) / (
+                6 * self.max_opponent_health)) * 100
         int(chance)
         print(chance)
+        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+        self.print_text("You throw the " + ball_name[ball] + " at the pokemon!", 30, 510, WHITE, 30)
+        display.update()
+        time.delay(3000)
         if random.randint(0, 100) <= chance:
-            print('Caught')
-            # next_id = cursor.execute('''SELECT max(Pokemon_id) FROM User_Pokemon''').fetchall()
-            # next_id = next_id[0][0] + 1
-            # print(self.opponent_attacks_list)
-            # cursor.execute('''INSERT INTO User_Pokemon VALUES
-            #                                                     (0, (?), (?), 1, 0, (?), (?), (?), (?))''',
-            #                (next_id, self.opp_poke_name, self.opponent_attacks_list[0],
-            #                 self.opponent_attacks_list[1], self.opponent_attacks_list[2],
-            #                 self.opponent_attacks_list[3]))
-            # conn.commit()
-            # self.battle_playing = False
+            print('Caught ' + self.opp_poke_name)
+            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            self.print_text("You successfully caught the " + self.opp_poke_name, 30, 510, WHITE, 30)
+            display.update()
+            next_id = cursor.execute('''SELECT max(Pokemon_id) FROM User_Pokemon''').fetchall()
+            next_id = next_id[0][0] + 1
+            print(self.opponent_attacks_list)
+            cursor.execute('''INSERT INTO User_Pokemon VALUES
+                                                                (0, (?), (?), 1, 0, (?), (?), (?), (?))''',
+                           (next_id, self.opp_poke_name, self.opponent_attacks_list[0],
+                            self.opponent_attacks_list[1], self.opponent_attacks_list[2],
+                            self.opponent_attacks_list[3]))
+            conn.commit()
+            time.delay(2000)
+            self.bag_selected = False
+            self.battle_playing = False
+            return True
         else:
+            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            self.print_text(self.opp_poke_name + " escaped from the " + ball_name[ball], 30, 510, WHITE, 30)
+            display.update()
             print('Not Caught')
+            time.delay(2000)
+            return False
 
     def load_battle(self):
-        self.opponent_health = 0
-        self.opp_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
+        self.player_pokemons = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand>0''').fetchall()
+        print(self.player_pokemons)
+        self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_poke_name = self.player_poke_name[0][0]
+
+        # fetch hp and moves of opponent pokemon
+        self.opp_poke_level = random.randint(self.player_poke_level-3, self.player_poke_level+3)
+        print(self.opp_poke_level)
+        self.opp_poke_name = random.choice(self.pokemon_list)
+        self.max_opponent_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
+                                                  (self.opp_poke_name,)).fetchall()
+        self.max_opponent_health = int(self.max_opponent_health[0][0])
+        self.opponent_health = self.max_opponent_health
+        atk_list = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
+                                                                    Pokemon where Pokemon_Name=(?)''',
                                          (self.opp_poke_name,)).fetchall()
-        for health in self.opp_health:
-            self.opponent_health = int(health[0])
-        self.max_opponent_health = self.opponent_health  # fetch
+        self.opponent_attacks_list = list(atk_list[0])
+
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
 
         bg_img = image.load(path.join(poke_folder, 'battle_background.png'))
         bg_img2 = image.load(path.join(poke_folder, 'dialogbox_background.png'))
 
-        print(self.opp_poke_name)
         user_poke_img = image.load(path.join(poke_folder, self.player_poke_name + '_back.png'))
         opp_poke_img = image.load(path.join(poke_folder, self.opp_poke_name + '_front.png'))
 
@@ -232,18 +257,28 @@ class Battle:
 
         # printing details
         self.print_text(self.player_poke_name, 570, 360, BLACK, 32)
+        self.print_text("Lv. "+str(self.player_poke_level), 570, 400, BLACK, 26)
         self.print_text(self.opp_poke_name, 60, 40, BLACK, 32)
+        self.print_text("Lv. " + str(self.opp_poke_level), 60, 90, BLACK, 26)
 
         # drawing health bars
         # opponent health bar
+        self.print_text("HP", 165, 85, BLACK, 15)
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
         self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
 
         # player health bar
+        self.print_text("HP", 665, 405, BLACK, 15)
         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (700, 410, 250, 10), LIGHTGREY, 0.5)
         self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+
+        # drawing xp bar for player
+        self.print_text("XP", 665, 425, BLACK, 15)
+        self.AAfilledRoundedRect(self.scr, (696, 426, 158, 18), BLACK, 0.7)
+        self.AAfilledRoundedRect(self.scr, (700, 430, 150, 10), LIGHTGREY, 0.5)
+        self.draw_xp_bar(self.player_poke_xp, self.player_poke_max_xp, 700, 430, 150, 10)
 
         # loading pokemon sprites
         self.scr.blit(user_poke_img, (150, 478 - user_poke_img.get_height()))
@@ -354,19 +389,50 @@ class Battle:
                             break
                         if event.key == pygame.K_1:
                             self.player_health += 50
+                            if self.player_health > self.max_player_health:
+                                self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon by 50 HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            display.update()
+                            time.delay(2000)
                         elif event.key == pygame.K_2:
                             self.player_health += 100
+                            if self.player_health > self.max_player_health:
+                                self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon by 100 HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            display.update()
+                            time.delay(2000)
                         elif event.key == pygame.K_3:
                             self.player_health += 200
+                            if self.player_health > self.max_player_health:
+                                self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon by 200 HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            display.update()
+                            time.delay(2000)
                         elif event.key == pygame.K_4:
                             self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon to full HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            display.update()
+                            time.delay(2000)
                         elif event.key == pygame.K_5:
-                            self.catch_pokemon(1)
+                            if self.catch_pokemon(1):
+                                break
                         elif event.key == pygame.K_6:
-                            self.catch_pokemon(1.5)
+                            if self.catch_pokemon(1.5):
+                                break
                         elif event.key == pygame.K_7:
-                            self.catch_pokemon(2)
+                            if self.catch_pokemon(2):
+                                break
                         self.bag_selected = False
+                        self.opponent_attack()
+                        time.delay(2000)
                         self.display_dialog_box()
                     # pokemon events
                     elif self.pokemon_selected:
@@ -407,15 +473,26 @@ class Battle:
             self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
         else:
-            self.draw_health_bar(0, self.max_opponent_health, 200, 90, 250, 10)
+            self.player_poke_xp += 5 * self.opp_poke_level
+            if self.player_poke_xp >= self.player_poke_max_xp:
+                self.player_poke_level += 1
+                self.player_poke_xp -= self.player_poke_max_xp
+            cursor.execute('''UPDATE User_Pokemon SET Level=(?),XP=(?) WHERE On_Hand=1''',
+                           (self.player_poke_level, self.player_poke_xp,))
+            conn.commit()
+            self.draw_health_bar(-1, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
             time.delay(2000)
             self.bg_music['Final Battle'].stop()
             self.sound_effects['Victory'].play()
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-            self.print_text("You Won!!", 20, 520, WHITE, 32)
+            self.print_text("You defeated the wild " + self.opp_poke_name, 20, 520, WHITE, 32)
             display.update()
-            time.delay(5000)
+            time.delay(2000)
+            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+            self.print_text(self.player_poke_name + " gained xxx XP", 20, 520, WHITE, 32)
+            display.update()
+            time.delay(3000)
             self.player_win = True
             self.battle_playing = False
 
