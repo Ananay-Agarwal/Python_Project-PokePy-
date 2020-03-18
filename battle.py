@@ -173,6 +173,7 @@ class Battle:
             self.print_text("6. " + user_poke_name[5], 850, 650, BLACK, 20)
 
     def change_pokemon(self, poke_no):
+        prevpoke = self.player_poke_name
         self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=(?)''',
                                                (poke_no,)).fetchall()
         self.player_poke_name = self.player_poke_name[0][0]
@@ -192,7 +193,9 @@ class Battle:
                                                  (self.player_poke_level,)).fetchall()
         self.player_poke_max_xp = self.player_poke_max_xp[0][0]
         self.load_battle_screen()
-        self.display_dialog_box()
+        self.print_text("You call "+prevpoke+" back and choose "+self.player_poke_name+" to fight!", 30, 510, WHITE, 30)
+        display.update()
+        time.delay(3000)
         display.update()
 
     def catch_pokemon(self, ball):
@@ -292,8 +295,11 @@ class Battle:
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
 
     def load_battle(self):
-        self.player_pokemons = cursor.execute(
-            '''SELECT Pokemon_Name, Level, XP FROM User_Pokemon WHERE On_Hand>0''').fetchall()
+        self.player_pokemons = []
+        for i in range(1, 6):
+            newpoke = cursor.execute('''SELECT Pokemon_Name, Level, XP FROM User_Pokemon WHERE On_Hand=(?)''',
+                                     (i,)).fetchall()
+            self.player_pokemons.append(newpoke[0])
         print("Your Pokemon(Name, Level, XP) : " + str(self.player_pokemons))
 
         self.poke_in_battle = 1
@@ -500,6 +506,9 @@ class Battle:
                             self.change_pokemon(6)
                             self.poke_in_battle = 6
                         self.pokemon_selected = False
+                        self.opponent_attack()
+                        time.delay(2000)
+                        self.display_dialog_box()
                 else:
                     self.battle_playing = False
 
@@ -534,12 +543,12 @@ class Battle:
                 self.player_poke_xp -= self.player_poke_max_xp
                 level_up = True
             cursor.execute('''UPDATE User_Pokemon SET Level=(?),XP=(?) WHERE On_Hand=(?)''',
-                           (self.player_poke_level, self.player_poke_xp,self.poke_in_battle))
+                           (self.player_poke_level, self.player_poke_xp, self.poke_in_battle))
             conn.commit()
             self.draw_health_bar(-1, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
             time.delay(2000)
-            self.bg_music['Final Battle'].stop()
+            self.bg_music['Battle_Music'].stop()
             self.sound_effects['Victory'].play()
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
             self.print_text("You defeated the wild " + self.opp_poke_name, 20, 520, WHITE, 32)
@@ -576,6 +585,7 @@ class Battle:
 
         self.player_health -= self.hp_to_reduce_player
         self.attack_selected = False
+
         # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
@@ -591,7 +601,7 @@ class Battle:
             self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
             display.update()
             time.delay(2000)
-            self.bg_music['Final Battle'].stop()
+            self.bg_music['Battle_Music'].stop()
             self.sound_effects['Lose'].play()
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
             self.print_text("You Lost!!", 20, 520, WHITE, 32)
@@ -602,13 +612,12 @@ class Battle:
             self.player_health = self.max_player_health
 
     def start_battle(self):
-        self.bg_music['Final Battle'].play(-1)
+        self.bg_music['Battle_Music'].play(-1)
         self.battle_playing = True
         self.player_win = False
         self.load_battle()
         if not self.player_win:
-            self.bg_music['Final Battle'].stop()
-
+            self.bg_music['Battle_Music'].stop()
 
 # obj = Battle()
 # obj.start_battle()
