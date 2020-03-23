@@ -11,20 +11,13 @@ class Game:
         icon = pg.image.load('Assets\Pokeball.png')
         pg.display.set_icon(icon)
         self.clock = pg.time.Clock()
+        self.current_map = 'Hometown.tmx'
         self.load_data()
         self.battle = Battle()
         self.draw_debug = False
         self.battle_encounter = False
-
-    def load_data(self):
-        game_folder = path.dirname(__file__)
-        img_folder = path.join(game_folder, 'Assets')
-        map_folder = path.join(img_folder, 'Maps')
-        self.map = TiledMap(path.join(map_folder, 'Hometown.tmx'))
-        self.map_img = self.map.make_map()
-        self.map_rect = self.map_img.get_rect()
-        self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
         # Loading Sounds
+        game_folder = path.dirname(__file__)
         sound_folder = path.join(game_folder, 'Sound Files')
         self.bg_music = {}
         for sound_type in BG_MUSIC:
@@ -33,6 +26,15 @@ class Game:
         self.sound_effects = {}
         for sound_type in EFFECTS_SOUNDS:
             self.sound_effects[sound_type] = pg.mixer.Sound(path.join(sound_folder, EFFECTS_SOUNDS[sound_type]))
+
+    def load_data(self):
+        game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, 'Assets')
+        map_folder = path.join(img_folder, 'Maps')
+        self.map = TiledMap(path.join(map_folder, self.current_map))
+        self.map_img = self.map.make_map()
+        self.map_rect = self.map_img.get_rect()
+        self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -95,7 +97,19 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
-            if 1400 <= self.player.pos.x <= 1800 and 1200 <= self.player.pos.y <= 1550:
+                if event.key == pg.K_e:
+                    if 580 <= self.player.pos.x <= 600 and 980 <= self.player.pos.y <= 995 \
+                            and self.current_map == "Hometown.tmx":
+                        self.current_map = "House.tmx"
+                        self.load_data()
+                        self.new()
+                    elif 512 <= self.player.pos.x <= 576 and self.player.pos.y == 690 \
+                            and self.current_map == "House.tmx":
+                        self.current_map = "Hometown.tmx"
+                        self.load_data()
+                        self.new()
+            if 1400 <= self.player.pos.x <= 1800 and 1200 <= self.player.pos.y <= 1550 \
+                    and self.current_map == "Hometown.tmx":
                 if self.player.encounter_chance > 8 and (self.player.vel.x != 0 or self.player.vel.y != 0):
                     self.battle_encounter = True
 

@@ -173,7 +173,7 @@ class Battle:
             self.print_text("6. " + user_poke_name[5], 850, 650, BLACK, 20)
 
     def change_pokemon(self, poke_no):
-        prevpoke = self.player_poke_name
+        self.poke_in_battle = poke_no
         self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=(?)''',
                                                (poke_no,)).fetchall()
         self.player_poke_name = self.player_poke_name[0][0]
@@ -192,11 +192,6 @@ class Battle:
         self.player_poke_max_xp = cursor.execute('''SELECT XP FROM Level_Chart WHERE Level=(?)''',
                                                  (self.player_poke_level,)).fetchall()
         self.player_poke_max_xp = self.player_poke_max_xp[0][0]
-        self.load_battle_screen()
-        self.print_text("You call "+prevpoke+" back and choose "+self.player_poke_name+" to fight!", 30, 510, WHITE, 30)
-        display.update()
-        time.delay(3000)
-        display.update()
 
     def catch_pokemon(self, ball):
         ball_name = {1: 'Pokeball', 1.5: 'Greatball', 2: 'Ultraball'}
@@ -297,10 +292,10 @@ class Battle:
     def load_battle(self):
         self.player_pokemons = []
         for i in range(1, 6):
-            newpoke = cursor.execute('''SELECT Pokemon_Name, Level, XP FROM User_Pokemon WHERE On_Hand=(?)''',
-                                     (i,)).fetchall()
+            newpoke = cursor.execute('''SELECT Pokemon_Name, Level, XP, Current_HP FROM User_Pokemon
+                                        WHERE On_Hand=(?)''', (i,)).fetchall()
             self.player_pokemons.append(newpoke[0])
-        print("Your Pokemon(Name, Level, XP) : " + str(self.player_pokemons))
+        print("Your Pokemon(Name, Level, XP, Current HP) : " + str(self.player_pokemons))
 
         self.poke_in_battle = 1
         self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=1''').fetchall()
@@ -331,6 +326,14 @@ class Battle:
                                                                     Pokemon where Pokemon_Name=(?)''',
                                          (self.opp_poke_name,)).fetchall()
         self.opponent_attacks_list = list(atk_list[0])
+
+        # change pokemon if selected pokemon is dead
+        while self.player_health <= 0:
+            self.poke_in_battle += 1
+            if self.poke_in_battle == 7:
+                self.battle_playing = False
+            else:
+                self.change_pokemon(self.poke_in_battle)
 
         self.load_battle_screen()  # Loading the display of screen
 
@@ -483,28 +486,47 @@ class Battle:
                         self.display_dialog_box()
                     # pokemon events
                     elif self.pokemon_selected:
+                        prevpoke = self.player_poke_name
                         if event.key == pygame.K_ESCAPE:
                             self.pokemon_selected = False
                             self.display_dialog_box()
                             break
                         if event.key == pygame.K_1:  # change to pokemon 1
-                            self.change_pokemon(1)
-                            self.poke_in_battle = 1
+                            if self.player_pokemons[0][3] > 0:
+                                self.change_pokemon(1)
+                            else:
+                                break
                         elif event.key == pygame.K_2:  # change to pokemon 2
-                            self.change_pokemon(2)
-                            self.poke_in_battle = 2
+                            if self.player_pokemons[1][3] > 0:
+                                self.change_pokemon(2)
+                            else:
+                                break
                         elif event.key == pygame.K_3:  # change to pokemon 3
-                            self.change_pokemon(3)
-                            self.poke_in_battle = 3
+                            if self.player_pokemons[2][3] > 0:
+                                self.change_pokemon(3)
+                            else:
+                                break
                         elif event.key == pygame.K_4:  # change to pokemon 4
-                            self.change_pokemon(4)
-                            self.poke_in_battle = 4
+                            if self.player_pokemons[3][3] > 0:
+                                self.change_pokemon(4)
+                            else:
+                                break
                         elif event.key == pygame.K_5:  # change to pokemon 5
-                            self.change_pokemon(5)
-                            self.poke_in_battle = 5
+                            if self.player_pokemons[4][3] > 0:
+                                self.change_pokemon(5)
+                            else:
+                                break
                         elif event.key == pygame.K_6:  # change to pokemon 6
-                            self.change_pokemon(6)
-                            self.poke_in_battle = 6
+                            if self.player_pokemons[5][3] > 0:
+                                self.change_pokemon(6)
+                            else:
+                                break
+                        self.load_battle_screen()
+                        display.update()
+                        self.print_text("You call " + prevpoke + " back and choose " + self.player_poke_name +
+                                        " to fight!", 30, 510, WHITE, 30)
+                        display.update()
+                        time.delay(3000)
                         self.pokemon_selected = False
                         self.opponent_attack()
                         time.delay(2000)
@@ -585,7 +607,12 @@ class Battle:
 
         self.player_health -= self.hp_to_reduce_player
         self.attack_selected = False
+        if self.player_health < 0:
+            self.player_health = 0
 
+        cursor.execute('''UPDATE User_Pokemon SET Current_HP=(?) WHERE On_Hand=(?)''',
+                       (self.player_health, self.poke_in_battle))
+        conn.commit()
         # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)

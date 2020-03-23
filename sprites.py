@@ -66,6 +66,7 @@ class Player(pg.sprite.Sprite):
                 self.rect.y = self.pos.y
 
     def update(self):
+        print(self.pos)
         self.get_keys()
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
