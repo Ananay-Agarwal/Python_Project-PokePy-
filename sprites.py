@@ -66,7 +66,6 @@ class Player(pg.sprite.Sprite):
                 self.rect.y = self.pos.y
 
     def update(self):
-        print(self.pos)
         self.get_keys()
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'Assets')
@@ -74,6 +73,7 @@ class Player(pg.sprite.Sprite):
         self.animation_counter += 1
         if self.animation_counter % 8 == 0:
             self.encounter_chance = random.randint(0, 9)
+            # print(self.pos)
         self.animation_counter %= 32
         # Animation update
         # changing player image based on direction and counter

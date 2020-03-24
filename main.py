@@ -1,5 +1,9 @@
 from sprites import *
 from tilemap import *
+import sqlite3
+
+conn = sqlite3.connect('PokePy.db')
+cursor = conn.cursor()
 
 
 class Game:
@@ -97,17 +101,26 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
+                # Interact check
                 if event.key == pg.K_e:
-                    if 580 <= self.player.pos.x <= 600 and 980 <= self.player.pos.y <= 995 \
-                            and self.current_map == "Hometown.tmx":
-                        self.current_map = "House.tmx"
-                        self.load_data()
-                        self.new()
-                    elif 512 <= self.player.pos.x <= 576 and self.player.pos.y == 690 \
-                            and self.current_map == "House.tmx":
-                        self.current_map = "Hometown.tmx"
-                        self.load_data()
-                        self.new()
+                    if self.current_map == "Hometown.tmx":
+                        if 580 <= self.player.pos.x <= 600 and 980 <= self.player.pos.y <= 995:
+                            self.current_map = "House.tmx"
+                            self.load_data()
+                            self.new()
+                    elif self.current_map == "House.tmx":
+                        if 512 <= self.player.pos.x <= 576 and self.player.pos.y == 690:
+                            self.current_map = "Hometown.tmx"
+                            self.load_data()
+                            self.new()
+                        if 530 <= self.player.pos.x <= 560 and self.player.pos.y == 159:
+                            print("Pokemon healed")
+                            cursor.execute('''UPDATE User_Pokemon SET Current_HP=
+                            (SELECT HP FROM Pokemon WHERE Pokemon.Pokemon_Name = User_Pokemon.Pokemon_Name)''')
+                            conn.commit()
+                        if 340 <= self.player.pos.x <= 360 and self.player.pos.y == 127:
+                            print("pc opened")
+            # Battle check
             if 1400 <= self.player.pos.x <= 1800 and 1200 <= self.player.pos.y <= 1550 \
                     and self.current_map == "Hometown.tmx":
                 if self.player.encounter_chance > 8 and (self.player.vel.x != 0 or self.player.vel.y != 0):
