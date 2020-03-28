@@ -1,6 +1,7 @@
 from sprites import *
 from tilemap import *
 import sqlite3
+from pc import *
 
 conn = sqlite3.connect('PokePy.db')
 cursor = conn.cursor()
@@ -18,8 +19,10 @@ class Game:
         self.current_map = 'Hometown.tmx'
         self.load_data()
         self.battle = Battle()
+        self.pc = PC()
         self.draw_debug = False
         self.battle_encounter = False
+        self.pc_opened = False
         # Loading Sounds
         game_folder = path.dirname(__file__)
         sound_folder = path.join(game_folder, 'Sound Files')
@@ -84,6 +87,9 @@ class Game:
             self.bg_music['Map_Music'].play(-1)
             self.new()
             self.battle_encounter = False
+        if self.pc_opened:
+            self.pc.start_pc()
+            self.pc_opened = False
 
         pg.display.flip()
 
@@ -119,7 +125,7 @@ class Game:
                             (SELECT HP FROM Pokemon WHERE Pokemon.Pokemon_Name = User_Pokemon.Pokemon_Name)''')
                             conn.commit()
                         if 340 <= self.player.pos.x <= 360 and self.player.pos.y == 127:
-                            print("pc opened")
+                            self.pc_opened = not self.pc_opened
             # Battle check
             if 1400 <= self.player.pos.x <= 1800 and 1200 <= self.player.pos.y <= 1550 \
                     and self.current_map == "Hometown.tmx":

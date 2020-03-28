@@ -291,9 +291,10 @@ class Battle:
 
     def load_battle(self):
         self.player_pokemons = []
-        for i in range(1, 6):
+        for i in range(1, 7):
             newpoke = cursor.execute('''SELECT Pokemon_Name, Level, XP, Current_HP FROM User_Pokemon
                                         WHERE On_Hand=(?)''', (i,)).fetchall()
+            print(newpoke)
             self.player_pokemons.append(newpoke[0])
         print("Your Pokemon(Name, Level, XP, Current HP) : " + str(self.player_pokemons))
 
