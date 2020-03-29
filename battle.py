@@ -535,6 +535,113 @@ class Battle:
                 else:
                     self.battle_playing = False
 
+    def damage_modifier(self, enemy_type , player_type):
+
+        if player_type=='ELECTRIC' and enemy_type == "FLYING":
+            return 2
+        elif player_type=='ELECTRIC' and enemy_type == "GRASS":
+            return 0.5
+        elif player_type=='ELECTRIC' and enemy_type == "FIRE":
+            return 1
+        elif player_type == 'ELECTRIC' and enemy_type == "WATER":
+            return 2
+        elif player_type == 'ELECTRIC' and enemy_type == "ROCK":
+            return 1
+        elif player_type == 'ELECTRIC' and enemy_type == "PSYCHIC":
+            return 1
+        elif player_type == 'ELECTRIC' and enemy_type == "ELECTRIC":
+            return 1
+
+        elif player_type=='GRASS' and enemy_type == "FLYING":
+            return 0.5
+        elif player_type=='GRASS' and enemy_type == "ELECTRIC":
+            return 1
+        elif player_type=='GRASS' and enemy_type == "FIRE":
+            return 0.5
+        elif player_type == 'GRASS' and enemy_type == "WATER":
+            return 2
+        elif player_type == 'GRASS' and enemy_type == "ROCK":
+            return 2
+        elif player_type == 'GRASS' and enemy_type == "PSYCHIC":
+            return 1
+        elif player_type == 'GRASS' and enemy_type == "GRASS":
+            return 1
+
+        elif player_type=='FIRE' and enemy_type == "FLYING":
+            return 1
+        elif player_type=='FIRE' and enemy_type == "ELECTRIC":
+            return 1
+        elif player_type=='FIRE' and enemy_type == "GRASS":
+            return 2
+        elif player_type == 'FIRE' and enemy_type == "WATER":
+            return 0.5
+        elif player_type == 'FIRE' and enemy_type == "ROCK":
+            return 0.5
+        elif player_type == 'FIRE' and enemy_type == "PSYCHIC":
+            return 1
+        elif player_type == 'FIRE' and enemy_type == "FIRE":
+            return 1
+
+        elif player_type=='WATER' and enemy_type == "FLYING":
+            return 1
+        elif player_type=='WATER' and enemy_type == "ELECTRIC":
+            return 1
+        elif player_type=='WATER' and enemy_type == "GRASS":
+            return 0.5
+        elif player_type == 'WATER' and enemy_type == "FIRE":
+            return 2
+        elif player_type == 'WATER' and enemy_type == "ROCK":
+            return 2
+        elif player_type == 'WATER' and enemy_type == "PSYCHIC":
+            return 1
+        elif player_type == 'WATER' and enemy_type == "WATER":
+            return 1
+
+        elif player_type=='FLYING' and enemy_type == "WATER":
+            return 1
+        elif player_type=='FLYING' and enemy_type == "ELECTRIC":
+            return 0.5
+        elif player_type=='FLYING' and enemy_type == "GRASS":
+            return 2
+        elif player_type == 'FLYING' and enemy_type == "FIRE":
+            return 1
+        elif player_type == 'FLYING' and enemy_type == "ROCK":
+            return 0.5
+        elif player_type == 'FLYING' and enemy_type == "PSYCHIC":
+            return 1
+        elif player_type == 'FLYING' and enemy_type == "FLYING":
+            return 1
+
+        elif player_type=='ROCK' and enemy_type == "WATER":
+            return 1
+        elif player_type=='ROCK' and enemy_type == "ELECTRIC":
+            return 1
+        elif player_type=='ROCK' and enemy_type == "GRASS":
+            return 1
+        elif player_type == 'ROCK' and enemy_type == "FIRE":
+            return 2
+        elif player_type == 'ROCK' and enemy_type == "FLYING":
+            return 2
+        elif player_type == 'ROCK' and enemy_type == "PSYCHIC":
+            return 1
+        elif player_type == 'ROCK' and enemy_type == "ROCK":
+            return 1
+
+        elif player_type=='PSYCHIC' and enemy_type == "WATER":
+            return 1
+        elif player_type=='PSYCHIC' and enemy_type == "ELECTRIC":
+            return 1
+        elif player_type=='PSYCHIC' and enemy_type == "GRASS":
+            return 1
+        elif player_type =='PSYCHIC' and enemy_type == "FIRE":
+            return 1
+        elif player_type =='PSYCHIC' and enemy_type == "FLYING":
+            return 1
+        elif player_type =='PSYCHIC' and enemy_type == "ROCK":
+            return 1
+        elif player_type == 'PSYCHIC' and enemy_type == "PSYCHIC":
+            return 1
+
     def player_attack(self, attacks, i):
         self.sound_effects['HIT_SFX_01'].play()
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
@@ -544,7 +651,18 @@ class Battle:
                                                (attacks[i],)).fetchall()
         for hp in self.hp_enemy:
             self.hp_to_reduce = int(hp[0])
-        self.opponent_health -= self.hp_to_reduce
+
+        self.type_user = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
+                                                (self.player_poke_name,)).fetchall()
+        for hp in self.type_user:
+            self.player_type = hp[0]
+        self.damage = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
+                                             (self.opp_poke_name,)).fetchall()
+        for hp in self.damage:
+            self.enemy_type = hp[0]
+
+        self.modifier = self.damage_modifier(self.enemy_type , self.player_type)
+        self.opponent_health -= (self.hp_to_reduce*self.modifier)
         # print("Opponents health reduced to : "+str(self.opponent_health))
         self.attack_selected = False
         # player health bar
@@ -606,7 +724,9 @@ class Battle:
         for hp in self.hp_user:
             self.hp_to_reduce_player = int(hp[0])
 
-        self.player_health -= self.hp_to_reduce_player
+        self.modifier = self.damage_modifier(self.enemy_type, self.player_type)
+
+        self.player_health -= (self.hp_to_reduce_player*self.modifier)
         self.attack_selected = False
         if self.player_health < 0:
             self.player_health = 0
