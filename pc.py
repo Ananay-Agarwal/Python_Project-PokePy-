@@ -22,8 +22,8 @@ class PC:
         self.pokemon_not_onhand = []
         self.pokemon_not_onhand = cursor.execute('''SELECT Pokemon_Name, Level, XP, Current_HP FROM User_Pokemon
                                                     WHERE On_Hand=0''').fetchall()
-        print(self.pokemon_onhand)
-        print(self.pokemon_not_onhand)
+        # print(self.pokemon_onhand)
+        # print(self.pokemon_not_onhand)
 
     def load_screen(self):
         game_folder = path.dirname(__file__)

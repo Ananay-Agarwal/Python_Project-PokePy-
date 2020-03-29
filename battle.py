@@ -294,7 +294,6 @@ class Battle:
         for i in range(1, 7):
             newpoke = cursor.execute('''SELECT Pokemon_Name, Level, XP, Current_HP FROM User_Pokemon
                                         WHERE On_Hand=(?)''', (i,)).fetchall()
-            print(newpoke)
             self.player_pokemons.append(newpoke[0])
         print("Your Pokemon(Name, Level, XP, Current HP) : " + str(self.player_pokemons))
 
@@ -535,134 +534,103 @@ class Battle:
                 else:
                     self.battle_playing = False
 
-    def damage_modifier(self, enemy_type , player_type):
+    def damage_modifier(self, pokemon_type, attack_type):
 
-        if player_type=='ELECTRIC' and enemy_type == "FLYING":
-            return 2
-        elif player_type=='ELECTRIC' and enemy_type == "GRASS":
-            return 0.5
-        elif player_type=='ELECTRIC' and enemy_type == "FIRE":
-            return 1
-        elif player_type == 'ELECTRIC' and enemy_type == "WATER":
-            return 2
-        elif player_type == 'ELECTRIC' and enemy_type == "ROCK":
-            return 1
-        elif player_type == 'ELECTRIC' and enemy_type == "PSYCHIC":
-            return 1
-        elif player_type == 'ELECTRIC' and enemy_type == "ELECTRIC":
-            return 1
+        if attack_type == 'ELECTRIC':
+            if pokemon_type == "FLYING" or pokemon_type == "WATER":
+                return 2
+            elif pokemon_type == "GRASS" or pokemon_type == "ROCK":
+                return 0.5
+            else:
+                return 1
 
-        elif player_type=='GRASS' and enemy_type == "FLYING":
-            return 0.5
-        elif player_type=='GRASS' and enemy_type == "ELECTRIC":
-            return 1
-        elif player_type=='GRASS' and enemy_type == "FIRE":
-            return 0.5
-        elif player_type == 'GRASS' and enemy_type == "WATER":
-            return 2
-        elif player_type == 'GRASS' and enemy_type == "ROCK":
-            return 2
-        elif player_type == 'GRASS' and enemy_type == "PSYCHIC":
-            return 1
-        elif player_type == 'GRASS' and enemy_type == "GRASS":
-            return 1
+        elif attack_type == 'GRASS':
+            if pokemon_type == "WATER" or pokemon_type == "ROCK":
+                return 2
+            elif pokemon_type == "FIRE" or pokemon_type == "FLYING":
+                return 0.5
+            else:
+                return 1
 
-        elif player_type=='FIRE' and enemy_type == "FLYING":
-            return 1
-        elif player_type=='FIRE' and enemy_type == "ELECTRIC":
-            return 1
-        elif player_type=='FIRE' and enemy_type == "GRASS":
-            return 2
-        elif player_type == 'FIRE' and enemy_type == "WATER":
-            return 0.5
-        elif player_type == 'FIRE' and enemy_type == "ROCK":
-            return 0.5
-        elif player_type == 'FIRE' and enemy_type == "PSYCHIC":
-            return 1
-        elif player_type == 'FIRE' and enemy_type == "FIRE":
-            return 1
+        elif attack_type == 'FIRE':
+            if pokemon_type == "GRASS":
+                return 2
+            elif pokemon_type == "WATER" or pokemon_type == "ROCK":
+                return 0.5
+            else:
+                return 1
 
-        elif player_type=='WATER' and enemy_type == "FLYING":
-            return 1
-        elif player_type=='WATER' and enemy_type == "ELECTRIC":
-            return 1
-        elif player_type=='WATER' and enemy_type == "GRASS":
-            return 0.5
-        elif player_type == 'WATER' and enemy_type == "FIRE":
-            return 2
-        elif player_type == 'WATER' and enemy_type == "ROCK":
-            return 2
-        elif player_type == 'WATER' and enemy_type == "PSYCHIC":
-            return 1
-        elif player_type == 'WATER' and enemy_type == "WATER":
-            return 1
+        elif attack_type == 'WATER':
+            if pokemon_type == "GRASS" or pokemon_type == "WATER":
+                return 0.5
+            elif pokemon_type == "FIRE" or pokemon_type == "ROCK":
+                return 2
+            else:
+                return 1
 
-        elif player_type=='FLYING' and enemy_type == "WATER":
-            return 1
-        elif player_type=='FLYING' and enemy_type == "ELECTRIC":
-            return 0.5
-        elif player_type=='FLYING' and enemy_type == "GRASS":
-            return 2
-        elif player_type == 'FLYING' and enemy_type == "FIRE":
-            return 1
-        elif player_type == 'FLYING' and enemy_type == "ROCK":
-            return 0.5
-        elif player_type == 'FLYING' and enemy_type == "PSYCHIC":
-            return 1
-        elif player_type == 'FLYING' and enemy_type == "FLYING":
+        elif attack_type == 'FLYING':
+            if pokemon_type == "ELECTRIC" or pokemon_type == "ROCK":
+                return 0.5
+            elif pokemon_type == "GRASS":
+                return 2
+            else:
+                return 1
+
+        elif attack_type == 'ROCK':
+            if pokemon_type == "ELECTRIC" or pokemon_type == "FLYING":
+                return 2
+            elif pokemon_type == "GRASS":
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == 'GROUND':
+            if pokemon_type == "FIRE":
+                return 2
+            elif pokemon_type == "GRASS" or pokemon_type == "FLYING":
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == 'PSYCHIC':
+            if pokemon_type == 'PSYCHIC':
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == "NORMAL":
             return 1
 
-        elif player_type=='ROCK' and enemy_type == "WATER":
-            return 1
-        elif player_type=='ROCK' and enemy_type == "ELECTRIC":
-            return 1
-        elif player_type=='ROCK' and enemy_type == "GRASS":
-            return 1
-        elif player_type == 'ROCK' and enemy_type == "FIRE":
-            return 2
-        elif player_type == 'ROCK' and enemy_type == "FLYING":
-            return 2
-        elif player_type == 'ROCK' and enemy_type == "PSYCHIC":
-            return 1
-        elif player_type == 'ROCK' and enemy_type == "ROCK":
-            return 1
-
-        elif player_type=='PSYCHIC' and enemy_type == "WATER":
-            return 1
-        elif player_type=='PSYCHIC' and enemy_type == "ELECTRIC":
-            return 1
-        elif player_type=='PSYCHIC' and enemy_type == "GRASS":
-            return 1
-        elif player_type =='PSYCHIC' and enemy_type == "FIRE":
-            return 1
-        elif player_type =='PSYCHIC' and enemy_type == "FLYING":
-            return 1
-        elif player_type =='PSYCHIC' and enemy_type == "ROCK":
-            return 1
-        elif player_type == 'PSYCHIC' and enemy_type == "PSYCHIC":
-            return 1
+        elif attack_type == "STEEL":
+            if pokemon_type == "ROCK":
+                return 2
+            elif pokemon_type == "FIRE" or pokemon_type == "WATER" or pokemon_type == "ELECTRIC":
+                return 0.5
+            else:
+                return 1
 
     def player_attack(self, attacks, i):
         self.sound_effects['HIT_SFX_01'].play()
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text(self.player_poke_name + " used " + attacks[i], 20, 520, WHITE, 32)
         display.update()
-        self.hp_enemy = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
-                                               (attacks[i],)).fetchall()
-        for hp in self.hp_enemy:
-            self.hp_to_reduce = int(hp[0])
+        # fetching damage
+        hp_to_reduce = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
+                                              (attacks[i],)).fetchall()
+        hp_to_reduce = int(hp_to_reduce[0][0])
+        # fetching attack type
+        attack_type = user_hp_cursor.execute('SELECT Move_Type from Moves where Move_Name=(?)',
+                                             (attacks[i],)).fetchall()
+        attack_type = attack_type[0][0]
+        # fetching enemy pokemon type
+        pokemon_type = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
+                                              (self.opp_poke_name,)).fetchall()
+        pokemon_type = pokemon_type[0][0]
 
-        self.type_user = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
-                                                (self.player_poke_name,)).fetchall()
-        for hp in self.type_user:
-            self.player_type = hp[0]
-        self.damage = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
-                                             (self.opp_poke_name,)).fetchall()
-        for hp in self.damage:
-            self.enemy_type = hp[0]
-
-        self.modifier = self.damage_modifier(self.enemy_type , self.player_type)
-        self.opponent_health -= (self.hp_to_reduce*self.modifier)
+        modifier = self.damage_modifier(pokemon_type, attack_type)  # finding dmg modifier
+        self.opponent_health -= (hp_to_reduce * modifier)
+        print("Player attack : "+attacks[i])
+        print("Player dmg = " + str(hp_to_reduce * modifier))
         # print("Opponents health reduced to : "+str(self.opponent_health))
         self.attack_selected = False
         # player health bar
@@ -719,14 +687,21 @@ class Battle:
         self.print_text(self.opp_poke_name + " used " + self.opp_poke_attack, 20, 520, WHITE, 32)
         display.update()
         # print("Opponent used "+self.opp_poke_attack)
-        self.hp_user = enemy_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
-                                               (self.opp_poke_attack,)).fetchall()
-        for hp in self.hp_user:
-            self.hp_to_reduce_player = int(hp[0])
-
-        self.modifier = self.damage_modifier(self.enemy_type, self.player_type)
-
-        self.player_health -= (self.hp_to_reduce_player*self.modifier)
+        self.hp_to_reduce_player = enemy_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
+                                                           (self.opp_poke_attack,)).fetchall()
+        self.hp_to_reduce_player = int(self.hp_to_reduce_player[0][0])
+        # fetching attack type
+        attack_type = user_hp_cursor.execute('SELECT Move_Type from Moves where Move_Name=(?)',
+                                             (self.opp_poke_attack,)).fetchall()
+        attack_type = attack_type[0][0]
+        # fetching player pokemon type
+        pokemon_type = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
+                                              (self.player_poke_name,)).fetchall()
+        pokemon_type = pokemon_type[0][0]
+        modifier = self.damage_modifier(pokemon_type, attack_type)
+        print("Enemy attack : "+self.opp_poke_attack)
+        print("Enemy dmg = " + str(self.hp_to_reduce_player * modifier))
+        self.player_health -= (self.hp_to_reduce_player * modifier)
         self.attack_selected = False
         if self.player_health < 0:
             self.player_health = 0
