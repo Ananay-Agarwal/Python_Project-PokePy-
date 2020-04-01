@@ -118,6 +118,10 @@ class Battle:
         self.print_text("4." + attacks[3], 750, 650, WHITE, 32)
 
     def display_bag(self):
+        self.item_quantity = []
+        item_quantity = cursor.execute('''SELECT Quantity FROM Items''').fetchall()
+        for item in item_quantity:
+            self.item_quantity.append(item[0])
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text("1. Potion", 50, 500, WHITE, 25)
         self.print_text("2. Super Potion", 50, 550, WHITE, 25)
@@ -126,10 +130,15 @@ class Battle:
         self.print_text("5. Pokeball", 50, 700, WHITE, 25)
         self.print_text("6. Greatball", 500, 500, WHITE, 25)
         self.print_text("7. Ultraball", 500, 550, WHITE, 25)
+        ct = 0
         for y in range(500, 710, 50):
             self.print_text("x", 300, y, WHITE, 25)
+            self.print_text(str(self.item_quantity[ct]), 320, y, WHITE, 25)
+            ct += 1
         self.print_text("x", 700, 500, WHITE, 25)
+        self.print_text(str(self.item_quantity[ct]), 720, 500, WHITE, 25)
         self.print_text("x", 700, 550, WHITE, 25)
+        self.print_text(str(self.item_quantity[ct+1]), 720, 550, WHITE, 25)
         display.update()
 
     def display_pokemon(self):
@@ -446,48 +455,77 @@ class Battle:
                         self.display_dialog_box()
                         break
                     if event.key == pygame.K_1:
-                        self.player_health += 50
-                        if self.player_health > self.max_player_health:
-                            self.player_health = self.max_player_health
-                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                        self.print_text("You healed your pokemon by 50 HP", 30, 510, WHITE, 30)
-                        self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-                        display.update()
-                        time.delay(2000)
+                        if self.item_quantity[0] > 0:
+                            self.player_health += 50
+                            if self.player_health > self.max_player_health:
+                                self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon by 50 HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[0] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[0], 1,))
+                            display.update()
+                            time.delay(2000)
                     elif event.key == pygame.K_2:
-                        self.player_health += 100
-                        if self.player_health > self.max_player_health:
-                            self.player_health = self.max_player_health
-                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                        self.print_text("You healed your pokemon by 100 HP", 30, 510, WHITE, 30)
-                        self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-                        display.update()
-                        time.delay(2000)
+                        if self.item_quantity[1] > 0:
+                            self.player_health += 100
+                            if self.player_health > self.max_player_health:
+                                self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon by 100 HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[1] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[1], 2,))
+                            display.update()
+                            time.delay(2000)
                     elif event.key == pygame.K_3:
-                        self.player_health += 200
-                        if self.player_health > self.max_player_health:
-                            self.player_health = self.max_player_health
-                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                        self.print_text("You healed your pokemon by 200 HP", 30, 510, WHITE, 30)
-                        self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-                        display.update()
-                        time.delay(2000)
+                        if self.item_quantity[2] > 0:
+                            self.player_health += 200
+                            if self.player_health > self.max_player_health:
+                                self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon by 200 HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[2] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[2], 3,))
+                            display.update()
+                            time.delay(2000)
                     elif event.key == pygame.K_4:
-                        self.player_health = self.max_player_health
-                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                        self.print_text("You healed your pokemon to full HP", 30, 510, WHITE, 30)
-                        self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
-                        display.update()
-                        time.delay(2000)
+                        if self.item_quantity[3] > 0:
+                            self.player_health = self.max_player_health
+                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                            self.print_text("You healed your pokemon to full HP", 30, 510, WHITE, 30)
+                            self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[3] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[3], 4,))
+                            display.update()
+                            time.delay(2000)
                     elif event.key == pygame.K_5:
-                        if self.catch_pokemon(1):
-                            break
+                        if self.item_quantity[4] > 0:
+                            self.item_quantity[4] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[4], 5,))
+                            if self.catch_pokemon(1):
+                                break
                     elif event.key == pygame.K_6:
-                        if self.catch_pokemon(1.5):
-                            break
+                        if self.item_quantity[5] > 0:
+                            self.item_quantity[5] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[5], 6,))
+                            if self.catch_pokemon(1.5):
+                                break
                     elif event.key == pygame.K_7:
-                        if self.catch_pokemon(2):
-                            break
+                        if self.item_quantity[6] > 0:
+                            self.item_quantity[6] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[6], 7,))
+                            if self.catch_pokemon(2):
+                                break
+                    conn.commit()
                     self.bag_selected = False
                     self.opponent_attack()
                     time.delay(2000)

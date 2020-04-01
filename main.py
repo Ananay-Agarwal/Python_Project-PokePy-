@@ -112,11 +112,15 @@ class Game:
                     if self.current_map == "Hometown.tmx":
                         if 580 <= self.player.pos.x <= 600 and 980 <= self.player.pos.y <= 995:
                             self.current_map = "House.tmx"
+                            self.bg_music['Map_Music'].stop()
+                            self.bg_music['Pokecenter_Music'].play(-1)
                             self.load_data()
                             self.new()
                     elif self.current_map == "House.tmx":
                         if 512 <= self.player.pos.x <= 576 and self.player.pos.y == 690:
                             self.current_map = "Hometown.tmx"
+                            self.bg_music['Pokecenter_Music'].stop()
+                            self.bg_music['Map_Music'].play(-1)
                             self.load_data()
                             self.new()
                         if 530 <= self.player.pos.x <= 560 and self.player.pos.y == 159:
