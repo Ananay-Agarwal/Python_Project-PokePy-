@@ -21,24 +21,9 @@ class Battle:
         self.bag_selected = False
         self.pokemon_selected = False
         self.player_win = False
+        self.not_dead = False
 
         self.pokemon_list = ['Bulbasaur', 'Charmander', 'Squirtle', 'Pidgey', 'Pikachu', 'Onix']
-        self.player_pokemons = cursor.execute(
-            '''SELECT Pokemon_Name, Level, XP FROM User_Pokemon WHERE On_Hand>0''').fetchall()
-
-        self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=1''').fetchall()
-        self.player_poke_name = self.player_poke_name[0][0]
-        self.max_player_health = cursor.execute('''SELECT HP FROM Pokemon WHERE Pokemon_Name=(?)''',
-                                                (self.player_poke_name,)).fetchall()
-        self.max_player_health = self.max_player_health[0][0]
-        self.player_health = self.max_player_health
-        self.player_poke_level = cursor.execute('''SELECT Level FROM User_Pokemon WHERE On_Hand=1''').fetchall()
-        self.player_poke_level = self.player_poke_level[0][0]
-        self.player_poke_xp = cursor.execute('''SELECT XP FROM User_Pokemon WHERE On_Hand=1''').fetchall()
-        self.player_poke_xp = self.player_poke_xp[0][0]
-        self.player_poke_max_xp = cursor.execute('''SELECT XP FROM Level_Chart WHERE Level=(?)''',
-                                                 (self.player_poke_level,)).fetchall()
-        self.player_poke_max_xp = self.player_poke_max_xp[0][0]
 
         self.scr = display.set_mode((1024, 768))
         self.scr.fill(LIGHTGREY)
@@ -133,6 +118,10 @@ class Battle:
         self.print_text("4." + attacks[3], 750, 650, WHITE, 32)
 
     def display_bag(self):
+        self.item_quantity = []
+        item_quantity = cursor.execute('''SELECT Quantity FROM Items''').fetchall()
+        for item in item_quantity:
+            self.item_quantity.append(item[0])
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text("1. Potion", 50, 500, WHITE, 25)
         self.print_text("2. Super Potion", 50, 550, WHITE, 25)
@@ -141,42 +130,78 @@ class Battle:
         self.print_text("5. Pokeball", 50, 700, WHITE, 25)
         self.print_text("6. Greatball", 500, 500, WHITE, 25)
         self.print_text("7. Ultraball", 500, 550, WHITE, 25)
+        ct = 0
         for y in range(500, 710, 50):
             self.print_text("x", 300, y, WHITE, 25)
+            self.print_text(str(self.item_quantity[ct]), 320, y, WHITE, 25)
+            ct += 1
         self.print_text("x", 700, 500, WHITE, 25)
+        self.print_text(str(self.item_quantity[ct]), 720, 500, WHITE, 25)
         self.print_text("x", 700, 550, WHITE, 25)
+        self.print_text(str(self.item_quantity[ct+1]), 720, 550, WHITE, 25)
         display.update()
 
     def display_pokemon(self):
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
-        user_poke_icon_1 = image.load(path.join(poke_folder, self.player_poke_name + '_icon.png'))
+        user_poke_icon = []
+        user_poke_name = []
+        for name in self.player_pokemons:
+            user_poke_name.append(name[0])
+            user_poke_icon.append(image.load(path.join(poke_folder, name[0] + '_icon.png')))
+
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
 
         # Draw small rectangles, small picture and pokemon name
         self.AAfilledRoundedRect(self.scr, (40, 540, 200, 40), LIGHTBLUE, 1)
-        self.scr.blit(user_poke_icon_1, (55, 570 - user_poke_icon_1.get_height()))  # pokemon 1
-        self.print_text("1. " + self.player_poke_name, 100, 550, BLACK, 20)
+        self.scr.blit(user_poke_icon[0], (55, 570 - user_poke_icon[0].get_height()))  # pokemon 1
+        self.print_text("1. " + user_poke_name[0], 100, 550, BLACK, 20)
 
-        self.AAfilledRoundedRect(self.scr, (420, 540, 200, 40), LIGHTBLUE, 1)
-        self.scr.blit(user_poke_icon_1, (435, 570 - user_poke_icon_1.get_height()))  # pokemon 2
-        self.print_text("2. " + self.player_poke_name, 480, 550, BLACK, 20)
+        if len(user_poke_name) >= 2:
+            self.AAfilledRoundedRect(self.scr, (420, 540, 200, 40), LIGHTBLUE, 1)
+            self.scr.blit(user_poke_icon[1], (435, 570 - user_poke_icon[1].get_height()))  # pokemon 2
+            self.print_text("2. " + user_poke_name[1], 480, 550, BLACK, 20)
 
-        self.AAfilledRoundedRect(self.scr, (790, 540, 200, 40), LIGHTBLUE, 1)
-        self.scr.blit(user_poke_icon_1, (805, 570 - user_poke_icon_1.get_height()))  # pokemon 3
-        self.print_text("3. " + self.player_poke_name, 850, 550, BLACK, 20)
+        if len(user_poke_name) >= 3:
+            self.AAfilledRoundedRect(self.scr, (790, 540, 200, 40), LIGHTBLUE, 1)
+            self.scr.blit(user_poke_icon[2], (805, 570 - user_poke_icon[2].get_height()))  # pokemon 3
+            self.print_text("3. " + user_poke_name[2], 850, 550, BLACK, 20)
 
-        self.AAfilledRoundedRect(self.scr, (40, 640, 200, 40), LIGHTBLUE, 1)
-        self.scr.blit(user_poke_icon_1, (55, 670 - user_poke_icon_1.get_height()))  # pokemon 4
-        self.print_text("4. " + self.player_poke_name, 100, 650, BLACK, 20)
+        if len(user_poke_name) >= 4:
+            self.AAfilledRoundedRect(self.scr, (40, 640, 200, 40), LIGHTBLUE, 1)
+            self.scr.blit(user_poke_icon[3], (55, 670 - user_poke_icon[3].get_height()))  # pokemon 4
+            self.print_text("4. " + user_poke_name[3], 100, 650, BLACK, 20)
 
-        self.AAfilledRoundedRect(self.scr, (420, 640, 200, 40), LIGHTBLUE, 1)
-        self.scr.blit(user_poke_icon_1, (435, 670 - user_poke_icon_1.get_height()))  # pokemon 5
-        self.print_text("5. " + self.player_poke_name, 480, 650, BLACK, 20)
+        if len(user_poke_name) >= 5:
+            self.AAfilledRoundedRect(self.scr, (420, 640, 200, 40), LIGHTBLUE, 1)
+            self.scr.blit(user_poke_icon[4], (435, 670 - user_poke_icon[4].get_height()))  # pokemon 5
+            self.print_text("5. " + user_poke_name[4], 480, 650, BLACK, 20)
 
-        self.AAfilledRoundedRect(self.scr, (790, 640, 200, 40), LIGHTBLUE, 1)
-        self.scr.blit(user_poke_icon_1, (805, 670 - user_poke_icon_1.get_height()))  # pokemon 6
-        self.print_text("6. " + self.player_poke_name, 850, 650, BLACK, 20)
+        if len(user_poke_name) >= 6:
+            self.AAfilledRoundedRect(self.scr, (790, 640, 200, 40), LIGHTBLUE, 1)
+            self.scr.blit(user_poke_icon[5], (805, 670 - user_poke_icon[5].get_height()))  # pokemon 6
+            self.print_text("6. " + user_poke_name[5], 850, 650, BLACK, 20)
+
+    def change_pokemon(self, poke_no):
+        self.poke_in_battle = poke_no
+        self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=(?)''',
+                                               (poke_no,)).fetchall()
+        self.player_poke_name = self.player_poke_name[0][0]
+        self.max_player_health = cursor.execute('''SELECT HP FROM Pokemon WHERE Pokemon_Name=(?)''',
+                                                (self.player_poke_name,)).fetchall()
+        self.max_player_health = self.max_player_health[0][0]
+        self.player_health = cursor.execute('''SELECT Current_HP FROM User_Pokemon WHERE On_Hand=(?)''',
+                                            (poke_no,)).fetchall()
+        self.player_health = self.player_health[0][0]
+        self.player_poke_level = cursor.execute('''SELECT Level FROM User_Pokemon WHERE On_Hand=(?)''',
+                                                (poke_no,)).fetchall()
+        self.player_poke_level = self.player_poke_level[0][0]
+        self.player_poke_xp = cursor.execute('''SELECT XP FROM User_Pokemon WHERE On_Hand=(?)''',
+                                             (poke_no,)).fetchall()
+        self.player_poke_xp = self.player_poke_xp[0][0]
+        self.player_poke_max_xp = cursor.execute('''SELECT XP FROM Level_Chart WHERE Level=(?)''',
+                                                 (self.player_poke_level,)).fetchall()
+        self.player_poke_max_xp = self.player_poke_max_xp[0][0]
 
     def catch_pokemon(self, ball):
         ball_name = {1: 'Pokeball', 1.5: 'Greatball', 2: 'Ultraball'}
@@ -195,12 +220,17 @@ class Battle:
             display.update()
             next_id = cursor.execute('''SELECT max(Pokemon_id) FROM User_Pokemon''').fetchall()
             next_id = next_id[0][0] + 1
+            on_hand = cursor.execute('''SELECT max(On_Hand) FROM User_Pokemon''').fetchall()
+            on_hand = on_hand[0][0]
+            if on_hand == 6:
+                on_hand = 0
+            else:
+                on_hand += 1
             print(self.opponent_attacks_list)
-            cursor.execute('''INSERT INTO User_Pokemon VALUES
-                                                                (0, (?), (?), 1, 0, (?), (?), (?), (?))''',
-                           (next_id, self.opp_poke_name, self.opponent_attacks_list[0],
-                            self.opponent_attacks_list[1], self.opponent_attacks_list[2],
-                            self.opponent_attacks_list[3]))
+            cursor.execute('''INSERT INTO User_Pokemon VALUES((?), (?), (?), (?), 0, (?), (?), (?), (?), (?))''',
+                           (on_hand, next_id, self.opp_poke_name, self.opp_poke_level, self.max_opponent_health,
+                            self.opponent_attacks_list[0], self.opponent_attacks_list[1],
+                            self.opponent_attacks_list[2], self.opponent_attacks_list[3]))
             conn.commit()
             time.delay(2000)
             self.bag_selected = False
@@ -214,25 +244,7 @@ class Battle:
             time.delay(2000)
             return False
 
-    def load_battle(self):
-        self.player_pokemons = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand>0''').fetchall()
-        print(self.player_pokemons)
-        self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=1''').fetchall()
-        self.player_poke_name = self.player_poke_name[0][0]
-
-        # fetch hp and moves of opponent pokemon
-        self.opp_poke_level = random.randint(self.player_poke_level-3, self.player_poke_level+3)
-        print(self.opp_poke_level)
-        self.opp_poke_name = random.choice(self.pokemon_list)
-        self.max_opponent_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
-                                                  (self.opp_poke_name,)).fetchall()
-        self.max_opponent_health = int(self.max_opponent_health[0][0])
-        self.opponent_health = self.max_opponent_health
-        atk_list = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
-                                                                    Pokemon where Pokemon_Name=(?)''',
-                                         (self.opp_poke_name,)).fetchall()
-        self.opponent_attacks_list = list(atk_list[0])
-
+    def load_battle_screen(self):
         game_folder = path.dirname(__file__)
         poke_folder = path.join(game_folder, 'Assets\Pokemon')
 
@@ -257,9 +269,9 @@ class Battle:
 
         # printing details
         self.print_text(self.player_poke_name, 570, 360, BLACK, 32)
-        self.print_text("Lv. "+str(self.player_poke_level), 570, 400, BLACK, 26)
+        self.print_text("Lv. " + str(self.player_poke_level), 570, 400, BLACK, 26)
         self.print_text(self.opp_poke_name, 60, 40, BLACK, 32)
-        self.print_text("Lv. " + str(self.opp_poke_level), 60, 90, BLACK, 26)
+        self.print_text("Lv. " + str(self.opp_poke_level), 60, 80, BLACK, 26)
 
         # drawing health bars
         # opponent health bar
@@ -286,6 +298,55 @@ class Battle:
 
         # loading main dialog box
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+
+    def load_battle(self):
+        self.player_pokemons = []
+        for i in range(1, 7):
+            newpoke = cursor.execute('''SELECT Pokemon_Name, Level, XP, Current_HP FROM User_Pokemon
+                                        WHERE On_Hand=(?)''', (i,)).fetchall()
+            self.player_pokemons.append(newpoke[0])
+        print("Your Pokemon(Name, Level, XP, Current HP) : " + str(self.player_pokemons))
+
+        self.poke_in_battle = 1
+        self.player_poke_name = cursor.execute('''SELECT Pokemon_Name FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_poke_name = self.player_poke_name[0][0]
+        self.max_player_health = cursor.execute('''SELECT HP FROM Pokemon WHERE Pokemon_Name=(?)''',
+                                                (self.player_poke_name,)).fetchall()
+        self.max_player_health = self.max_player_health[0][0]
+        self.player_health = cursor.execute('''SELECT Current_HP FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_health = self.player_health[0][0]
+        self.player_poke_level = cursor.execute('''SELECT Level FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_poke_level = self.player_poke_level[0][0]
+        self.player_poke_xp = cursor.execute('''SELECT XP FROM User_Pokemon WHERE On_Hand=1''').fetchall()
+        self.player_poke_xp = self.player_poke_xp[0][0]
+        self.player_poke_max_xp = cursor.execute('''SELECT XP FROM Level_Chart WHERE Level=(?)''',
+                                                 (self.player_poke_level,)).fetchall()
+        self.player_poke_max_xp = self.player_poke_max_xp[0][0]
+
+        # fetch hp and moves of opponent pokemon
+        self.opp_poke_level = random.randint(self.player_poke_level - 3, self.player_poke_level + 3)
+        if self.opp_poke_level <= 0:
+            self.opp_poke_level = 1
+        self.opp_poke_name = random.choice(self.pokemon_list)
+        self.max_opponent_health = cursor.execute('SELECT HP from Pokemon where Pokemon_Name=(?)',
+                                                  (self.opp_poke_name,)).fetchall()
+        self.max_opponent_health = int(self.max_opponent_health[0][0])
+        self.opponent_health = self.max_opponent_health
+        atk_list = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
+                                                                    Pokemon where Pokemon_Name=(?)''',
+                                         (self.opp_poke_name,)).fetchall()
+        self.opponent_attacks_list = list(atk_list[0])
+
+        # change pokemon if selected pokemon is dead
+        while self.player_health <= 0:
+            self.poke_in_battle += 1
+            if self.poke_in_battle == 7:
+                self.battle_playing = False
+            else:
+                self.change_pokemon(self.poke_in_battle)
+
+        self.load_battle_screen()  # Loading the display of screen
+
         self.print_text("A wild Pokemon has appeared!", 30, 520, WHITE, 32)
         display.update()
         time.delay(2000)
@@ -312,154 +373,309 @@ class Battle:
             if event.type == pygame.QUIT:
                 self.quit_battle()
             elif event.type == pygame.KEYDOWN:
-                if self.opponent_health >= 1 and self.player_health >= 1:
-                    attacks = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
-                                            Pokemon where Pokemon_Name=(?)''',
-                                                    (self.player_poke_name,)).fetchall()
-                    attacks = list(attacks[0])
-                    # dialog box events
-                    if not self.attack_selected and not self.bag_selected and not self.pokemon_selected:
-                        if event.key == pygame.K_1:
-                            self.display_attacks(attacks)
-                            self.attack_selected = True
-                        elif event.key == pygame.K_2:
-                            self.display_bag()
-                            self.bag_selected = True
-                        elif event.key == pygame.K_3:
-                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.print_text("Pokemon List", 30, 520, WHITE, 32)
-                            self.display_pokemon()
-                            self.pokemon_selected = True
-                        elif event.key == pygame.K_4:
-                            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-                            self.flee_counter = random.randrange(1, 9)
-                            print(self.flee_counter)
-                            if self.flee_counter <= 5:
-                                self.print_text("You successfully run away!", 50, 520, WHITE, 32)
-                                display.update()
-                                time.delay(2000)
-                                self.battle_playing = False
-                            else:
-                                self.print_text("You couldn't escape!", 50, 520, WHITE, 32)
-                                display.update()
-                                time.delay(2000)
-                                self.opponent_attack()
-                                time.delay(1000)
-                                self.display_dialog_box()
-                    # attack events
-                    elif self.attack_selected:
-                        if event.key == pygame.K_ESCAPE:
-                            self.attack_selected = False
+                attacks = attack_cursor.execute('''SELECT Move1 , Move2 , Move3 , Move4 from 
+                                                            Pokemon where Pokemon_Name=(?)''',
+                                                (self.player_poke_name,)).fetchall()
+                attacks = list(attacks[0])
+                # dialog box events
+                if not self.attack_selected and not self.bag_selected and not self.pokemon_selected:
+                    if event.key == pygame.K_1:  # attack selected
+                        self.display_attacks(attacks)
+                        self.attack_selected = True
+                    elif event.key == pygame.K_2:  # bag selected
+                        self.display_bag()
+                        self.bag_selected = True
+                    elif event.key == pygame.K_3: # pokemon selected
+                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                        self.print_text("Pokemon List", 30, 520, WHITE, 32)
+                        self.display_pokemon()
+                        self.pokemon_selected = True
+                    elif event.key == pygame.K_4:  # run away
+                        self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                        self.flee_counter = random.randrange(1, 9)
+                        if self.flee_counter <= 5:
+                            self.print_text("You successfully run away!", 50, 520, WHITE, 32)
+                            display.update()
+                            time.delay(2000)
+                            self.battle_playing = False
+                        else:
+                            self.print_text("You couldn't escape!", 50, 520, WHITE, 32)
+                            display.update()
+                            time.delay(2000)
+                            self.opponent_attack()
+                            time.delay(1000)
                             self.display_dialog_box()
-                            break
-                        if event.key == pygame.K_1:
-                            self.player_attack(attacks, 0)
-                            time.delay(1000)
-                            if not self.player_win:
-                                self.opponent_attack()
-                                time.delay(1000)
-                                self.display_dialog_box()
-                        elif event.key == pygame.K_2:
-                            self.player_attack(attacks, 1)
-                            time.delay(1000)
-                            if not self.player_win:
-                                self.opponent_attack()
-                                time.delay(1000)
-                                self.display_dialog_box()
-                        elif event.key == pygame.K_3:
-                            self.player_attack(attacks, 2)
-                            time.delay(1000)
-                            if not self.player_win:
-                                self.opponent_attack()
-                                time.delay(1000)
-                                self.display_dialog_box()
-                        elif event.key == pygame.K_4:
-                            self.player_attack(attacks, 3)
-                            time.delay(1000)
-                            if not self.player_win:
-                                self.opponent_attack()
-                                time.delay(1000)
-                                self.display_dialog_box()
+                # attack events
+                elif self.attack_selected:
+                    if event.key == pygame.K_ESCAPE:
                         self.attack_selected = False
-                    # bag events
-                    elif self.bag_selected:
-                        if event.key == pygame.K_ESCAPE:
-                            self.bag_selected = False
-                            self.display_dialog_box()
-                            break
-                        if event.key == pygame.K_1:
+                        self.display_dialog_box()
+                        break
+                    if event.key == pygame.K_1:
+                        self.player_attack(attacks, 0)
+                        time.delay(1000)
+                        if not self.player_win:
+                            self.opponent_attack()
+                            time.delay(1000)
+                            if not self.not_dead:
+                                self.display_dialog_box()
+                                self.not_dead = False
+                    elif event.key == pygame.K_2:
+                        self.player_attack(attacks, 1)
+                        time.delay(1000)
+                        if not self.player_win:
+                            self.opponent_attack()
+                            time.delay(1000)
+                            if not self.not_dead:
+                                self.display_dialog_box()
+                                self.not_dead = False
+                    elif event.key == pygame.K_3:
+                        self.player_attack(attacks, 2)
+                        time.delay(1000)
+                        if not self.player_win:
+                            self.opponent_attack()
+                            time.delay(1000)
+                            if not self.not_dead:
+                                self.display_dialog_box()
+                                self.not_dead = False
+                    elif event.key == pygame.K_4:
+                        self.player_attack(attacks, 3)
+                        time.delay(1000)
+                        if not self.player_win:
+                            self.opponent_attack()
+                            time.delay(1000)
+                            if not self.not_dead:
+                                self.display_dialog_box()
+                                self.not_dead = False
+                    self.attack_selected = False
+                # bag events
+                elif self.bag_selected:
+                    if event.key == pygame.K_ESCAPE:
+                        self.bag_selected = False
+                        self.display_dialog_box()
+                        break
+                    if event.key == pygame.K_1:
+                        if self.item_quantity[0] > 0:
                             self.player_health += 50
                             if self.player_health > self.max_player_health:
                                 self.player_health = self.max_player_health
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                             self.print_text("You healed your pokemon by 50 HP", 30, 510, WHITE, 30)
                             self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[0] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[0], 1,))
                             display.update()
                             time.delay(2000)
-                        elif event.key == pygame.K_2:
+                    elif event.key == pygame.K_2:
+                        if self.item_quantity[1] > 0:
                             self.player_health += 100
                             if self.player_health > self.max_player_health:
                                 self.player_health = self.max_player_health
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                             self.print_text("You healed your pokemon by 100 HP", 30, 510, WHITE, 30)
                             self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[1] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[1], 2,))
                             display.update()
                             time.delay(2000)
-                        elif event.key == pygame.K_3:
+                    elif event.key == pygame.K_3:
+                        if self.item_quantity[2] > 0:
                             self.player_health += 200
                             if self.player_health > self.max_player_health:
                                 self.player_health = self.max_player_health
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                             self.print_text("You healed your pokemon by 200 HP", 30, 510, WHITE, 30)
                             self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[2] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[2], 3,))
                             display.update()
                             time.delay(2000)
-                        elif event.key == pygame.K_4:
+                    elif event.key == pygame.K_4:
+                        if self.item_quantity[3] > 0:
                             self.player_health = self.max_player_health
                             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
                             self.print_text("You healed your pokemon to full HP", 30, 510, WHITE, 30)
                             self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
+                            self.item_quantity[3] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[3], 4,))
                             display.update()
                             time.delay(2000)
-                        elif event.key == pygame.K_5:
+                    elif event.key == pygame.K_5:
+                        if self.item_quantity[4] > 0:
+                            self.item_quantity[4] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[4], 5,))
                             if self.catch_pokemon(1):
                                 break
-                        elif event.key == pygame.K_6:
+                    elif event.key == pygame.K_6:
+                        if self.item_quantity[5] > 0:
+                            self.item_quantity[5] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[5], 6,))
                             if self.catch_pokemon(1.5):
                                 break
-                        elif event.key == pygame.K_7:
+                    elif event.key == pygame.K_7:
+                        if self.item_quantity[6] > 0:
+                            self.item_quantity[6] -= 1
+                            cursor.execute('''UPDATE Items SET Quantity=(?) WHERE Item_ID=(?)''',
+                                           (self.item_quantity[6], 7,))
                             if self.catch_pokemon(2):
                                 break
-                        self.bag_selected = False
-                        self.opponent_attack()
-                        time.delay(2000)
+                    conn.commit()
+                    self.bag_selected = False
+                    self.opponent_attack()
+                    time.delay(2000)
+                    self.display_dialog_box()
+                # pokemon events
+                elif self.pokemon_selected:
+                    prevpoke = self.player_poke_name
+                    if event.key == pygame.K_ESCAPE:
+                        self.pokemon_selected = False
                         self.display_dialog_box()
-                    # pokemon events
-                    elif self.pokemon_selected:
-                        if event.key == pygame.K_ESCAPE:
-                            self.pokemon_selected = False
-                            self.display_dialog_box()
+                        break
+                    if event.key == pygame.K_1:  # change to pokemon 1
+                        if self.player_pokemons[0][3] > 0:
+                            self.change_pokemon(1)
+                        else:
                             break
-                        # if event.key == pygame.K_1: # change to pokemon 1
-                        # elif event.key == pygame.K_2: # change to pokemon 2
-                        # elif event.key == pygame.K_3: # change to pokemon 3
-                        # elif event.key == pygame.K_4: # change to pokemon 4
-                        # elif event.key == pygame.K_5: # change to pokemon 5
-                        # elif event.key == pygame.K_6: # change to pokemon 6
-                else:
-                    self.battle_playing = False
+                    elif event.key == pygame.K_2:  # change to pokemon 2
+                        if self.player_pokemons[1][3] > 0:
+                            self.change_pokemon(2)
+                        else:
+                            break
+                    elif event.key == pygame.K_3:  # change to pokemon 3
+                        if self.player_pokemons[2][3] > 0:
+                            self.change_pokemon(3)
+                        else:
+                            break
+                    elif event.key == pygame.K_4:  # change to pokemon 4
+                        if self.player_pokemons[3][3] > 0:
+                            self.change_pokemon(4)
+                        else:
+                            break
+                    elif event.key == pygame.K_5:  # change to pokemon 5
+                        if self.player_pokemons[4][3] > 0:
+                            self.change_pokemon(5)
+                        else:
+                            break
+                    elif event.key == pygame.K_6:  # change to pokemon 6
+                        if self.player_pokemons[5][3] > 0:
+                            self.change_pokemon(6)
+                        else:
+                            break
+                    self.load_battle_screen()
+                    display.update()
+                    self.print_text("You call " + prevpoke + " back and choose " + self.player_poke_name +
+                                    " to fight!", 30, 510, WHITE, 30)
+                    display.update()
+                    time.delay(3000)
+                    self.pokemon_selected = False
+                    self.opponent_attack()
+                    time.delay(2000)
+                    self.display_dialog_box()
+
+    def damage_modifier(self, pokemon_type, attack_type):
+
+        if attack_type == 'ELECTRIC':
+            if pokemon_type == "FLYING" or pokemon_type == "WATER":
+                return 2
+            elif pokemon_type == "GRASS" or pokemon_type == "ROCK":
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == 'GRASS':
+            if pokemon_type == "WATER" or pokemon_type == "ROCK":
+                return 2
+            elif pokemon_type == "FIRE" or pokemon_type == "FLYING":
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == 'FIRE':
+            if pokemon_type == "GRASS":
+                return 2
+            elif pokemon_type == "WATER" or pokemon_type == "ROCK":
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == 'WATER':
+            if pokemon_type == "GRASS" or pokemon_type == "WATER":
+                return 0.5
+            elif pokemon_type == "FIRE" or pokemon_type == "ROCK":
+                return 2
+            else:
+                return 1
+
+        elif attack_type == 'FLYING':
+            if pokemon_type == "ELECTRIC" or pokemon_type == "ROCK":
+                return 0.5
+            elif pokemon_type == "GRASS":
+                return 2
+            else:
+                return 1
+
+        elif attack_type == 'ROCK':
+            if pokemon_type == "ELECTRIC" or pokemon_type == "FLYING":
+                return 2
+            elif pokemon_type == "GRASS":
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == 'GROUND':
+            if pokemon_type == "FIRE":
+                return 2
+            elif pokemon_type == "GRASS" or pokemon_type == "FLYING":
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == 'PSYCHIC':
+            if pokemon_type == 'PSYCHIC':
+                return 0.5
+            else:
+                return 1
+
+        elif attack_type == "NORMAL":
+            return 1
+
+        elif attack_type == "STEEL":
+            if pokemon_type == "ROCK":
+                return 2
+            elif pokemon_type == "FIRE" or pokemon_type == "WATER" or pokemon_type == "ELECTRIC":
+                return 0.5
+            else:
+                return 1
 
     def player_attack(self, attacks, i):
         self.sound_effects['HIT_SFX_01'].play()
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text(self.player_poke_name + " used " + attacks[i], 20, 520, WHITE, 32)
         display.update()
-        self.hp_enemy = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
-                                               (attacks[i],)).fetchall()
-        for hp in self.hp_enemy:
-            self.hp_to_reduce = int(hp[0])
-        self.opponent_health -= self.hp_to_reduce
-        print(self.opponent_health)
+        # fetching damage
+        hp_to_reduce = user_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
+                                              (attacks[i],)).fetchall()
+        hp_to_reduce = int(hp_to_reduce[0][0])
+        # fetching attack type
+        attack_type = user_hp_cursor.execute('SELECT Move_Type from Moves where Move_Name=(?)',
+                                             (attacks[i],)).fetchall()
+        attack_type = attack_type[0][0]
+        # fetching enemy pokemon type
+        pokemon_type = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
+                                              (self.opp_poke_name,)).fetchall()
+        pokemon_type = pokemon_type[0][0]
+
+        modifier = self.damage_modifier(pokemon_type, attack_type)  # finding dmg modifier
+        self.opponent_health -= (hp_to_reduce * modifier)
+        print("Player attack : "+attacks[i])
+        print("Player dmg = " + str(hp_to_reduce * modifier))
+        # print("Opponents health reduced to : "+str(self.opponent_health))
         self.attack_selected = False
         # player health bar
         self.AAfilledRoundedRect(self.scr, (696, 406, 258, 18), BLACK, 0.7)
@@ -473,24 +689,31 @@ class Battle:
             self.draw_health_bar(self.opponent_health, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
         else:
+            level_up = False
             self.player_poke_xp += 5 * self.opp_poke_level
             if self.player_poke_xp >= self.player_poke_max_xp:
                 self.player_poke_level += 1
                 self.player_poke_xp -= self.player_poke_max_xp
-            cursor.execute('''UPDATE User_Pokemon SET Level=(?),XP=(?) WHERE On_Hand=1''',
-                           (self.player_poke_level, self.player_poke_xp,))
+                level_up = True
+            cursor.execute('''UPDATE User_Pokemon SET Level=(?),XP=(?) WHERE On_Hand=(?)''',
+                           (self.player_poke_level, self.player_poke_xp, self.poke_in_battle))
             conn.commit()
             self.draw_health_bar(-1, self.max_opponent_health, 200, 90, 250, 10)
             display.update()
             time.delay(2000)
-            self.bg_music['Final Battle'].stop()
+            self.bg_music['Battle_Music'].stop()
             self.sound_effects['Victory'].play()
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
             self.print_text("You defeated the wild " + self.opp_poke_name, 20, 520, WHITE, 32)
             display.update()
             time.delay(2000)
+            self.load_battle_screen()
             self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-            self.print_text(self.player_poke_name + " gained xxx XP", 20, 520, WHITE, 32)
+            self.print_text(self.player_poke_name + " gained " + str(5 * self.opp_poke_level) + " XP", 20, 520, WHITE,
+                            32)
+            if level_up:
+                self.print_text(self.player_poke_name + "'s Level increased to " + str(self.player_poke_level),
+                                20, 570, WHITE, 32)
             display.update()
             time.delay(3000)
             self.player_win = True
@@ -507,14 +730,29 @@ class Battle:
         self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
         self.print_text(self.opp_poke_name + " used " + self.opp_poke_attack, 20, 520, WHITE, 32)
         display.update()
-        print(self.opp_poke_attack)
-        self.hp_user = enemy_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
-                                               (self.opp_poke_attack,)).fetchall()
-        for hp in self.hp_user:
-            self.hp_to_reduce_player = int(hp[0])
-
-        self.player_health -= self.hp_to_reduce_player
+        # print("Opponent used "+self.opp_poke_attack)
+        self.hp_to_reduce_player = enemy_hp_cursor.execute('SELECT Move_damage from Moves where Move_Name=(?)',
+                                                           (self.opp_poke_attack,)).fetchall()
+        self.hp_to_reduce_player = int(self.hp_to_reduce_player[0][0])
+        # fetching attack type
+        attack_type = user_hp_cursor.execute('SELECT Move_Type from Moves where Move_Name=(?)',
+                                             (self.opp_poke_attack,)).fetchall()
+        attack_type = attack_type[0][0]
+        # fetching player pokemon type
+        pokemon_type = user_hp_cursor.execute('SELECT Pokemon_Type from Pokemon where Pokemon_Name=(?)',
+                                              (self.player_poke_name,)).fetchall()
+        pokemon_type = pokemon_type[0][0]
+        modifier = self.damage_modifier(pokemon_type, attack_type)
+        print("Enemy attack : "+self.opp_poke_attack)
+        print("Enemy dmg = " + str(self.hp_to_reduce_player * modifier))
+        self.player_health -= (self.hp_to_reduce_player * modifier)
         self.attack_selected = False
+        if self.player_health < 0:
+            self.player_health = 0
+
+        cursor.execute('''UPDATE User_Pokemon SET Current_HP=(?) WHERE On_Hand=(?)''',
+                       (self.player_health, self.poke_in_battle))
+        conn.commit()
         # opponent health bar
         self.AAfilledRoundedRect(self.scr, (196, 86, 258, 18), BLACK, 0.7)
         self.AAfilledRoundedRect(self.scr, (200, 90, 250, 10), LIGHTGREY, 0.5)
@@ -527,27 +765,48 @@ class Battle:
             self.draw_health_bar(self.player_health, self.max_player_health, 700, 410, 250, 10)
             display.update()
         else:
+            self.not_dead = False
             self.draw_health_bar(0, self.max_player_health, 700, 410, 250, 10)
             display.update()
             time.delay(2000)
-            self.bg_music['Final Battle'].stop()
-            self.sound_effects['Lose'].play()
-            self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
-            self.print_text("You Lost!!", 20, 520, WHITE, 32)
-            display.update()
-            time.delay(3000)
-            self.player_win = True
-            self.battle_playing = False
-            self.player_health = self.max_player_health
+            self.player_pokemons = []
+            for i in range(1, 7):
+                newpoke = cursor.execute('''SELECT Pokemon_Name, Level, XP, Current_HP FROM User_Pokemon
+                                                   WHERE On_Hand=(?)''', (i,)).fetchall()
+                self.player_pokemons.append(newpoke[0])
+            for pokemon in self.player_pokemons:
+                if pokemon[3] > 0:
+                    self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                    self.print_text(self.player_poke_name+" fainted!", 20, 520, WHITE, 32)
+                    display.update()
+                    time.delay(2000)
+                    self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                    self.print_text("Choose your next pokemon.....", 20, 520, WHITE, 32)
+                    display.update()
+                    time.delay(2000)
+                    self.display_pokemon()
+                    display.update()
+                    self.pokemon_selected = True
+                    self.not_dead = True
+                    break
+            if self.not_dead == False:
+                self.bg_music['Battle_Music'].stop()
+                self.sound_effects['Lose'].play()
+                self.AAfilledRoundedRect(self.scr, (10, 490, 1000, 260), BLUE, 0.3)
+                self.print_text("You Lost!!", 20, 520, WHITE, 32)
+                display.update()
+                time.delay(3000)
+                self.player_win = True
+                self.battle_playing = False
+                self.player_health = self.max_player_health
 
     def start_battle(self):
-        self.bg_music['Final Battle'].play(-1)
+        self.bg_music['Battle_Music'].play(-1)
         self.battle_playing = True
         self.player_win = False
         self.load_battle()
         if not self.player_win:
-            self.bg_music['Final Battle'].stop()
+            self.bg_music['Battle_Music'].stop()
 
-
-obj = Battle()
-obj.start_battle()
+# obj = Battle()
+# obj.start_battle()

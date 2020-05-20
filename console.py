@@ -27,7 +27,8 @@ EFFECTS_SOUNDS = {'HIT_SFX_01': 'firered_000D.wav',
 BG_MUSIC = {'Map_Music': 'Road to Viridian City.wav',
             'Battle_Music': 'Battle! (Wild Pokémon).wav',
             'Ascension': 'Ascension.wav',
-            'Final Battle': 'Final Battle.wav'}
+            'Final Battle': 'Final Battle.wav',
+            'Pokecenter_Music': 'Yoshikage_Kira_Theme.wav'}
 
 # Player settings
 PLAYER_SPEED = 300

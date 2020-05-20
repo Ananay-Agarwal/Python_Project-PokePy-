@@ -73,6 +73,7 @@ class Player(pg.sprite.Sprite):
         self.animation_counter += 1
         if self.animation_counter % 8 == 0:
             self.encounter_chance = random.randint(0, 9)
+            # print(self.pos)
         self.animation_counter %= 32
         # Animation update
         # changing player image based on direction and counter
