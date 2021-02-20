@@ -1,4 +1,4 @@
-# Python_Project
+# PokePy
 This is **PokePy** - A role playing game based on the famous pokemon Black and White Game
   
 It was made primarily using **Pygames** library!!  
